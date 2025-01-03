@@ -2,7 +2,7 @@
 /*
 Plugin Name: Internal Links Manager
 Description: Build internal links easily.
-Version:     2.5.3
+Version:     2.5.4
 Author:      webraketen
 Author URI:  https://www.webraketen.io
 License:     GPLv2 or later

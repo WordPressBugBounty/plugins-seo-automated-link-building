@@ -3,8 +3,8 @@ Contributors: webraketen
 Tags: seo, link building, search engine optimization, user experience, internal links,
 Requires PHP: 5.4
 Requires at least: 4.0
-Tested up to: 6.6
-Stable tag: 2.5.3
+Tested up to: 6.7
+Stable tag: 2.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,9 @@ We are grateful for every help. Simply send us an Email to contact@internal-link
 2. Navigate to "Internal Links Manager" in your WordPress admin menu and add your first link.
 
 == Changelog ==
+
+= 2.5.4 =
+* Compatibility to Wordpress 6.7
 
 = 2.5.3 =
 * Fixed security issue that allowed users with low role (subscriber) to use the export links function (thanks for noticing to https://patchstack.com/)
