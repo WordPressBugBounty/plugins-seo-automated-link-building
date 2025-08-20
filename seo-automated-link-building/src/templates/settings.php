@@ -17,67 +17,55 @@
  * For questions related to this program contact post@webraketen-media.de
  */
 ?>
-<div class="wrap">
-    <h1 class="wp-heading-inline"><?php print $settingsHeadline ?></h1>
-    <form method="post" action="<?php print $adminPostUrl ?>">
-        <table class="form-table">
-            <tbody>
-                <tr>
-                    <th><?php print $whitelistHeadline ?></th>
-                    <td>
-                        <textarea rows="5" name="whitelist" placeholder="<?php print $whitelistHeadline ?>"><?php print $whitelist ?></textarea>
-                        <p class="description"><?php print $whitelistDescription ?></p>
-                        <p class="description"><?php print $inputDescription ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php print $blacklistHeadline ?></th>
-                    <td>
-                        <textarea rows="5" name="blacklist" placeholder="<?php print $blacklistHeadline ?>"><?php echo $blacklist ?></textarea>
-                        <p class="description"><?php print $blacklistDescription ?></p>
-                        <p class="description"><?php print $inputDescription ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php print $postTypesHeadline ?></th>
-                    <td>
-                    <p class="posttypes-chooser"><?php print $postTypesLabel ?>: <?php print join(', ', array_map(function($item) {
-                        return "<code class='post-type-option'>$item</code>";
-                    }, $availablePostTypes)) ?></p>
-                    </p>
-                        <textarea rows="5" name="posttypes" placeholder="<?php print $postTypesHeadline ?>"><?php print $postTypes ?></textarea>
-                        <p class="description"><?php print $postTypesDescription ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php print $excludeHeadline ?></th>
-                    <td>
-                        <textarea rows="5" name="exclude" placeholder="<?php print $excludeExample ?>"><?php print $exclude ?></textarea>
-                        <p class="description"><?php print $excludeDescription ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php print $disableStatisticsHeadline ?></th>
-                    <td>
-                        <label>
-                            <input type="checkbox" name="disableStatistics" <?php if($disableStatistics): ?>checked<?php endif; ?> />
-                            <?php print $disableStatisticsDescription ?>
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php print $disableAdminTrackingHeadline ?></th>
-                    <td>
-                        <label>
-                            <input type="checkbox" name="disableAdminTracking" <?php if($disableAdminTracking): ?>checked<?php endif; ?> />
-                            <?php print $disableAdminTrackingDescription ?>
-                        </label>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <input type="hidden" name="action" value="seo_automated_link_building_settings" />
-        <?php wp_nonce_field( 'seo_automated_link_building_settings', 'nonce' ); ?>
-        <input type="submit" class="button button-primary" value="<?php _e('Save') ?>">
+
+<?php
+$default_tab = null;
+$tab = isset($_GET['tab']) ? $_GET['tab'] : $default_tab;
+$save_disabled = false;
+$action = '';
+?>
+
+<div class="wrap ilm-settings">
+    <h1 class="wp-heading-inline"><?php print __('Settings') ?></h1>
+
+    <form id="save-settings" method="post" action="<?php print $adminPostUrl ?>">
+
+        <nav class="nav-tab-wrapper">
+            <a href="?page=seo-automated-link-building-settings" class="nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>"><?php print __('General settings', 'seo-automated-link-building') ?></a>
+            <a href="?page=seo-automated-link-building-settings&tab=content" class="nav-tab <?php if($tab==='content'):?>nav-tab-active<?php endif; ?>"><?php print __('Content', 'seo-automated-link-building') ?></a>
+            <a href="?page=seo-automated-link-building-settings&tab=caching" class="nav-tab <?php if($tab==='caching'):?>nav-tab-active<?php endif; ?>"><?php print __('Caching', 'seo-automated-link-building') ?></a>
+            <a href="?page=seo-automated-link-building-settings&tab=plugins" class="nav-tab <?php if($tab==='plugins'):?>nav-tab-active<?php endif; ?>"><?php print __('3rd party plugins', 'seo-automated-link-building') ?></a>
+        </nav>
+
+        <div class="tab-content">
+
+			<?php switch($tab) :
+				case 'caching':
+					$save_disabled = true;
+					include __DIR__ . '/partials/cache-settings.php';
+					break;
+				case 'content':
+					$action = 'seo_automated_link_building_settings';
+					include __DIR__ . '/partials/content-settings.php';
+					break;
+				case 'plugins':
+					$save_disabled = true;
+					include __DIR__ . '/partials/plugins-settings.php';
+					break;
+				default:
+					$action = 'seo_automated_link_building_settings';
+					include __DIR__ . '/partials/general-settings.php';
+					break;
+			endswitch; ?>
+        </div>
+
+        <input type="hidden" name="action" value="<?php echo $action ?>" />
+		<?php wp_nonce_field( $action, 'nonce' ); ?>
+		<?php if ($save_disabled === true) {
+			?> <input type="submit" disabled="disabled" class="button button-primary" value="<?php _e('Save') ?>"> <?php
+		} else {
+			?> <input type="submit" class="button button-primary" value="<?php _e('Save') ?>"> <?php
+		}
+		?>
     </form>
 </div>

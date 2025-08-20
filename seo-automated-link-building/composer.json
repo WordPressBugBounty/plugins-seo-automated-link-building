@@ -13,5 +13,8 @@
     },
     "autoload": {
         "psr-4": {"SeoAutomatedLinkBuilding\\": "src/"}
+    },
+    "config": {
+        "cache-dir": "./.cache"
     }
 }

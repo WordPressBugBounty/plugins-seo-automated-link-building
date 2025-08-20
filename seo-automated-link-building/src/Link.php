@@ -51,6 +51,11 @@ class Link extends ActiveRecord
         'priority' => 'int',
     ];
 
+	/**
+	 * @var array
+	 */
+	protected $settings = [];
+
     public function getKeywords()
     {
         $keywords = json_decode($this->keywords, false, 512, JSON_UNESCAPED_UNICODE);
@@ -127,6 +132,10 @@ class Link extends ActiveRecord
             "data-$dataHash" => $this->id,
         ];
 
+	    if(!empty($this->settings['cssLinkClass'])) {
+		    $attrs['class'] = $this->settings['cssLinkClass'];
+	    }
+
         if(!$this->notitle) {
             $attrs['title'] = $title;
             if(empty($attrs['title'])) {
@@ -157,4 +166,9 @@ class Link extends ActiveRecord
 
         return "<a $attrsStr>$match</a>";
     }
+
+	public function set_settings( array $settings ) {
+		$this->settings = $settings;
+		return $this;
+	}
 }

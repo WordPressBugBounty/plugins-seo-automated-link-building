@@ -65,7 +65,7 @@ class HtmlChanger
 
     /**
      * Search for exact matches
-     * 
+     *
      * The array is in the following format:
      * [
      *  "keyword" => $options
@@ -75,7 +75,7 @@ class HtmlChanger
 
     /**
      * Search for case insensitive matches
-     * 
+     *
      * The array is in the following format:
      * [
      *  "keyword" => $options
@@ -105,9 +105,9 @@ class HtmlChanger
             $searchExact = [];
             foreach($options['search'] as $key => $value) {
                 $value = array_merge([
-                    'group' => $key, 
-                    'maxCount' => -1, 
-                    'caseInsensitive' => false, 
+                    'group' => $key,
+                    'maxCount' => -1,
+                    'caseInsensitive' => false,
                     'priority' => 0,
                 ], $value);
                 if($value['caseInsensitive']) {
@@ -130,7 +130,7 @@ class HtmlChanger
      * Parse html code and return HtmlChanger instance
      *
      * @param string $html
-     * @param array $options 
+     * @param array $options
      *                  ['search']
      * @return Html5Changer
      */
@@ -158,7 +158,7 @@ class HtmlChanger
     private function getChar($relativePosition = 0)
     {
         $index = $this->index + $relativePosition;
-        return isset($this->chars[$index]) ? $this->chars[$index] : null;
+        return isset($this->chars[$index]) ? $this->chars[$index] : '';
     }
 
     private function nextchar($string, &$pointer)
@@ -320,7 +320,7 @@ class HtmlChanger
             $searchTerm = substr($part->code, -$len);
             $searchObject = null;
 
-            
+
             // search in exact list
             if(array_key_exists($searchTerm, $this->searchExact)) {
                 $searchObject = $this->searchExact[$searchTerm];
@@ -333,30 +333,30 @@ class HtmlChanger
                     $searchResult = [$searchTerm, [$partLength - $len, $len], $searchObject];
                 }
             }
-        
+
             if($searchResult) {
                 $ignoreWordBoundary = array_key_exists('wordBoundary', $searchObject) && $searchObject['wordBoundary'] === false;
-                
+
                 if(!$ignoreWordBoundary) {
                     $followingChar = mb_strtolower($this->getChar(1));
                     $wordBounder = empty($followingChar) || preg_match("/^\W$/u", $followingChar);
-                    
+
                     if(!$wordBounder) {
                         $searchObject = null;
                         $searchResult = null;
                         continue;
                     }
-                    
+
                     $previousChar = $partLength - $len > 0 ? mb_strtolower($part->code[$partLength-$len-1]) : null;
                     $wordBounder = empty($previousChar) || preg_match("/^\W$/u", $previousChar);
-                    
+
                     if(!$wordBounder) {
                         $searchObject = null;
                         $searchResult = null;
                         continue;
                     }
                 }
-                
+
                 // has word boundary on both sides
                 $group = $searchObject['group'];
                 if($searchObject['maxCount'] > 0) {
@@ -407,7 +407,7 @@ class HtmlChanger
             if($char === '=') {
                 $part->state = 'attributes.value';
                 return;
-            } 
+            }
             if($char === '/') {
                 $part->selfclosing = true;
             }
@@ -433,7 +433,7 @@ class HtmlChanger
             if($part->attributeChar) {
                 if($char === $part->attributeChar) {
                     $part->attributeChar = null;
-                    
+
                     $this->finishAttribute();
                     return;
                 }
@@ -444,7 +444,7 @@ class HtmlChanger
                 }
                 $part->attributeValue .= $char;
                 return;
-            } 
+            }
         }
     }
 
@@ -482,7 +482,7 @@ class HtmlChanger
             $collission = false;
 
             // check if there is an collission with other part
-            for ($i=0; $i < $index; $i++) { 
+            for ($i=0; $i < $index; $i++) {
                 $otherTextBlock = $part->search[$i];
                 if($textBlock[1][0] < $otherTextBlock[1][0] + $otherTextBlock[1][1] && $textBlock[1][0] + $textBlock[1][1] > $otherTextBlock[1][0]) {
                     $collission = true;

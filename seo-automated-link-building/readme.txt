@@ -1,10 +1,10 @@
 ﻿=== Internal Links Manager ===
-Contributors: webraketen
+Contributors: webraketen, freemius
 Tags: seo, link building, search engine optimization, user experience, internal links,
-Requires PHP: 5.4
-Requires at least: 4.0
-Tested up to: 6.7
-Stable tag: 2.5.4
+Requires PHP: 7.4
+Requires at least: 5.0
+Tested up to: 6.8
+Stable tag: 3.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,17 @@ We are grateful for every help. Simply send us an Email to contact@internal-link
 2. Navigate to "Internal Links Manager" in your WordPress admin menu and add your first link.
 
 == Changelog ==
+
+= 3.0.0 =
+* Compatibility to Wordpress 6.8
+* Introducing Pro Features:
+    * Support caching via Redis, Memcached, APCu, database or filesystem
+    * Display link processing time for administrators
+    * WooCommerce Support
+    * (A)CF Support
+    * Add links to post excerpts
+    * Add links to category descriptions
+    * Permission management
 
 = 2.5.4 =
 * Compatibility to Wordpress 6.7

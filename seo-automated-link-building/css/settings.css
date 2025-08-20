@@ -1,9 +1,80 @@
-.post-type-option {
+tr[data-tooltip] {
+    position: relative;
+    cursor: help;
+}
+
+tr[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #990000;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 9999;
+}
+
+tr[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateY(-8px);
+}
+
+.ilm-settings .tab-content,
+.ilm-settings .nav-tab-active {
+    background-color: #ffffff;
+}
+
+.ilm-settings .tab-content {
+    padding-left: 1em;
+}
+
+.ilm-settings .form-table {
+    margin-top: 0;
+    padding-top: .5em;
+    margin-bottom: 1em;
+}
+
+.ilm-settings .disabled,
+.ilm-settings .disabled th,
+.ilm-settings .disabled input,
+.ilm-settings .disabled input::placeholder,
+.ilm-settings .disabled select,
+.ilm-settings .disabled .description {
+    color: #999;
+}
+
+.ilm-settings .caching-option {
+    display: none;
+}
+
+.ilm-settings .post-type-option {
     cursor: pointer;
     user-select: none;
 }
 
-.posttypes-chooser code.active {
+.ilm-settings .posttypes-chooser code.active {
     background: #333;
     color: #fff;
+}
+
+.ilm-settings .form-table th {
+    padding-left: 10px;
+}
+
+.ilm-settings .form-table textarea {
+    min-width: 400px;
+    max-width: 100%;
+}
+
+.ilm-settings input.field-error,
+.ilm-settings select.field-error {
+    border-color: #dc3232 !important;
+    box-shadow: 0 0 2px rgba(220, 50, 50, .8);
 }

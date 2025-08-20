@@ -65,7 +65,8 @@ class TextConverter {
      */
     public function addLinks(array $links)
     {
-        $search = [];
+	    $settings = Settings::get();
+	    $search = [];
         /**
          * @var Link $link
          */
@@ -73,6 +74,9 @@ class TextConverter {
             if($link->num === 0) {
                 continue;
             }
+
+	        $link->set_settings($settings);
+
             foreach($link->getKeywords() as $keyword) {
                 $options = [
                     'caseInsensitive' => !$link->case_sensitive,
@@ -104,7 +108,7 @@ class TextConverter {
                 $search[$escapedKeyword3] = $options;
             }
         }
-        $settings = Settings::get();
+
         $htmlChanger = new HtmlChanger($this->text, [
             'search' => $search,
             'ignore' => array_merge([

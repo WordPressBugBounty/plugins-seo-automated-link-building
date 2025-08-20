@@ -22,12 +22,23 @@ namespace SeoAutomatedLinkBuilding;
 
 class Plugin
 {
-    private $name;
-    public static $domain = 'seo-automated-link-building';
+    protected $name;
+
+	public static $domain = 'seo-automated-link-building';
     private $dbVersion = '1.4.1';
 
     protected $editData = null;
     protected $statisticData = null;
+
+	protected $settings;
+
+	/**
+	 * returns the required capability to make this plugin usable
+	 * @return string
+	 */
+	protected function getUserCapability(){
+		return 'manage_options';
+	}
 
     protected function getEditData()
     {
@@ -51,6 +62,29 @@ class Plugin
         $this->editData->page = $page;
         return $this->editData;
     }
+
+	/**
+	 * @param string|null $key
+	 * @param string|null $subkey
+	 *
+	 * @return mixed
+	 */
+	public function getSettings($key = null, $subkey = null) {
+		if ($key !== null){
+			if(array_key_exists($key, $this->settings)){
+				if($subkey !== null) {
+					if(array_key_exists($subkey, $this->settings[$key])) {
+						return $this->settings[$key][$subkey];
+					}
+					return false;
+				}
+				return $this->settings[$key];
+			}
+			return false;
+		}
+
+		return $this->settings;
+	}
 
     protected function getStatisticData()
     {
@@ -132,7 +166,7 @@ class Plugin
         $this->name = $name;
         add_action( 'init', [$this, 'init'] );
         if(is_admin()) {
-            add_filter("plugin_action_links_$name", [$this, 'addActionLinks']);
+	        add_filter("plugin_action_links_$name", [$this, 'addActionLinks']);
             add_filter('set-screen-option', [$this, 'setCMIOptions'], 10, 3);
             add_action('admin_menu', [$this, 'addMenuItems']);
             register_activation_hook( $name, [$this, 'updateTable']);
@@ -146,23 +180,30 @@ class Plugin
             add_action( 'wp_ajax_seo_automated_link_building_export_links', [$this, 'exportLinks']);
             add_action( 'admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
             add_action( 'wp_ajax_seo_automated_link_building_track_link', [$this, 'trackLink'] );
+	        add_action( 'admin_notices', [$this, 'displayAdminMessage']);
         }
 
         add_action( 'wp_ajax_nopriv_seo_automated_link_building_track_link', [$this, 'trackLink'] );
         add_action( 'wp_enqueue_scripts', [$this, 'enqueueScripts'] );
+
         add_filter('the_content', [$this, 'changeContent'], 99);
     }
 
     public function init()
     {
         Settings::init();
-        if(is_admin()) {
-            load_plugin_textdomain('seo-automated-link-building', false, 'seo-automated-link-building/lang/');
-        }
+	    $this->settings = Settings::get();
     }
 
     public function enqueueAdminScripts($hook_suffix)
     {
+	    wp_enqueue_script('seo-automated-link-building-common', plugins_url('/js/seo-automated-link-building.admin.js', $this->name ),
+		    ['jquery', 'wp-i18n'],
+		    '1.0.0',
+		    true
+	    );
+	    wp_set_script_translations('seo-automated-link-building-common', 'seo-automated-link-building');
+
         // edit/creation page
         if($hook_suffix === 'internal-links-manager_page_seo-automated-link-building-add-link' || $hook_suffix === 'toplevel_page_seo-automated-link-building-all-links' && $this->getEditData()->link) {
             // taggle (https://sean.is/poppin/tags)
@@ -326,6 +367,24 @@ class Plugin
         update_option( "{$domain}_db_version", $this->dbVersion );
     }
 
+	/**
+	 * @param $option
+	 * @param $message
+	 * @param $type
+	 *
+	 * @return void
+	 */
+	public function displayAdminMessage() {
+		$option = get_option( 'ilm_admin_message' );
+		if ( isset( $option['message'] ) ) {
+			echo "<div class='notice notice-" . $option['type'] . " is-dismissible'>";
+			echo "<p>{$option['message']}</p>";
+			echo "</div>";
+
+			delete_option( 'ilm_admin_message' );
+		}
+	}
+
     public function updateTable()
     {
         $domain = static::$domain;
@@ -365,7 +424,7 @@ class Plugin
         add_menu_page(
             'Internal Links Manager',
             'Internal Links Manager',
-            'manage_options',
+            $this->getUserCapability(),
             'seo-automated-link-building-all-links',
             [$this, 'renderList'],
             'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDQxOC44NCA2NjcuNTgiPjxkZWZzPjxzdHlsZT4uY2xzLTF7ZmlsbDpub25lO2lzb2xhdGlvbjppc29sYXRlO30uY2xzLTIsLmNscy0ze2ZpbGw6I2E0YWFhZTt9LmNscy0ze21peC1ibGVuZC1tb2RlOm11bHRpcGx5O29wYWNpdHk6LjM2O308L3N0eWxlPjwvZGVmcz48ZyBjbGFzcz0iY2xzLTEiPjxnIGlkPSJFYmVuZV8yIj48ZyBpZD0iTGF5ZXJfMSI+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJtNjQuMDYsMTQyLjgxQzE2My41Myw1My45MSwyMjguODYsMCwyMjguODYsMGMwLDAsMTEyLjU2LDczLjQ4LDI5LjQ2LDE1MC4zOC04OS4xNiw4Mi41Mi0xNjMuOSwxMjUuMjgtMTAzLjUsMTcwLjQ0LDkyLjM5LDY5LjA5LTEyMC4xNi01MC4zMy0xMjAuMTYtNTAuMzMsMCwwLTI0LjctNzkuNzgsMjkuMzktMTI3LjY4WiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0ibTI1OC4zMywxNTAuMzhjLTg5LjE2LDgyLjUyLTE2My45LDEyNS4yOC0xMDMuNSwxNzAuNDQsNDguODcsMzYuNTQsMTIuNDIsMjAuMzQtMzIuNzYtMy4wMy05LjM5LTExLjI5LTE3LjkzLTIyLjAyLTI1LjA3LTMwLjI4LTI5LjQxLTM0LjA1LTE1LjA1LTgxLjM0LDU3Ljc4LTEzMS40NkMyMjcuNiwxMDUuOTIsMjg4LjEzLDQwLjY3LDIyOC44NiwwYzAsMCwxMTIuNTYsNzMuNDgsMjkuNDYsMTUwLjM4WiIvPjxwYXRoIGNsYXNzPSJjbHMtMyIgZD0ibTM0LjY3LDI3MC40OXMtMjQuNy03OS43OCwyOS4zOS0xMjcuNjhjMS4wNS0uOTQsMi4wOC0xLjg1LDMuMTMtMi43OS02MC4wNCw1My4xNSw1NC4wMywxNDcuNDgsODMuMDEsMTA5Ljk1aDBjLTIyLDI2LjQ5LTI1LjQyLDQ4LjM3LDQuNjQsNzAuODUsMy43NSwyLjgsNi45NCw1LjI2LDkuNzIsNy40Ni4yMSwzLjQzLjM1LDYuODYuNDEsMTAuMjgtMzUuNDItMTQuNzgtMTMwLjI5LTY4LjA4LTEzMC4yOS02OC4wOFoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Im0yMjAuMDYsMzYzLjE3QzEwMy4wNCwyODguOTgtMTIuNywyMTMuNzQsNjQuMDYsMTQyLjgxYy00NC43NywzNy41OS00Ni4yOCw3OS41Mi01My40MiwxMjAuMTEtMTQuNjUsODMuMjMtMjcuMSwxMjUuMzksNTUuOTQsMTg3LjI2LDY5LjgyLDUyLjAyLDY5Ljc3LDQxLjk5LDExOS4yMi0yLjAxLDQ4LjQyLTQzLjA4LDY1LjU1LTY1LjE1LDM0LjI2LTg1WiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0ibTE4NS44LDQ0OC4xN2MxLjc1LTEuNTYsMy40NS0zLjA4LDUuMTItNC41OEM5OC41Myw0MDcuNTMsMTguMjcsMzMwLjE5LDguMDUsMjc3LjRjLTEzLjIxLDczLjg1LTE5LjU2LDExNC42LDU4LjUyLDE3Mi43OCw2OS44Miw1Mi4wMiw2OS43Nyw0MS45OSwxMTkuMjItMi4wMVoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Im0yMjAuMDYsMzYzLjE3QzEwMy4wNCwyODguOTgtMTIuNywyMTMuNzQsNjQuMDYsMTQyLjgxYy0xMS43Myw5Ljg1LTIwLjQ4LDE5Ljk5LTI3LjE1LDMwLjMzLTI3LjYxLDYyLjkyLDczLjc4LDEyOC42MywxNzYuMTUsMTkzLjUzLDMxLjMsMTkuODQsMTQuMTcsNDEuOTEtMzQuMjYsODUtMTYuNTUsMTQuNzItMjcuNTUsMjUuNjMtMzcuNDksMzEuNywxMS45OS00LjU2LDIzLjk5LTE2Ljk2LDQ0LjQ5LTM1LjIsNDguNDItNDMuMDgsNjUuNTUtNjUuMTUsMzQuMjYtODVaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJtMzU0Ljc5LDUyNC43N2MtOTkuNDgsODguOS0xNjQuODEsMTQyLjgxLTE2NC44MSwxNDIuODEsMCwwLTExMi41Ni03My40OC0yOS40Ni0xNTAuMzgsODkuMTYtODIuNTIsMTYzLjktMTI1LjI4LDEwMy41LTE3MC40NC05Mi4zOS02OS4wOSwxMjAuMTYsNTAuMzMsMTIwLjE2LDUwLjMzLDAsMCwyNC43LDc5Ljc4LTI5LjM5LDEyNy42OFoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Im0xNjAuNTIsNTE3LjIxYzg5LjE2LTgyLjUyLDE2My45LTEyNS4yOCwxMDMuNS0xNzAuNDQtNDguODctMzYuNTQtMTIuNDItMjAuMzQsMzIuNzcsMy4wMyw5LjM5LDExLjI5LDE3LjkzLDIyLjAyLDI1LjA3LDMwLjI4LDI5LjQxLDM0LjA1LDE1LjA1LDgxLjM0LTU3Ljc4LDEzMS40Ni03Mi44Miw1MC4xMy0xMzMuMzUsMTE1LjM4LTc0LjA5LDE1Ni4wNSwwLDAtMTEyLjU2LTczLjQ4LTI5LjQ2LTE1MC4zOFoiLz48cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Im0zODQuMTgsMzk3LjA5czI0LjcsNzkuNzgtMjkuMzksMTI3LjY4Yy0xLjA1Ljk0LTIuMDgsMS44NS0zLjEyLDIuNzksNjAuMDQtNTMuMTUtNTQuMDMtMTQ3LjQ4LTgzLjAxLTEwOS45NWgwYzIyLTI2LjQ5LDI1LjQyLTQ4LjM3LTQuNjQtNzAuODUtMy43NS0yLjgtNi45NC01LjI2LTkuNzItNy40Ni0uMjEtMy40My0uMzUtNi44Ni0uNDEtMTAuMjgsMzUuNDIsMTQuNzgsMTMwLjI5LDY4LjA4LDEzMC4yOSw2OC4wOFoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Im0xOTguNzgsMzA0LjQxYzExNy4wMiw3NC4xOSwyMzIuNzUsMTQ5LjQzLDE1NiwyMjAuMzYsNDQuNzctMzcuNTksNDYuMjgtNzkuNTIsNTMuNDItMTIwLjExLDE0LjY1LTgzLjIzLDI3LjEtMTI1LjM5LTU1Ljk0LTE4Ny4yNi02OS44Mi01Mi4wMi02OS43Ny00MS45OS0xMTkuMjIsMi4wMS00OC40Miw0My4wOC02NS41NSw2NS4xNS0zNC4yNiw4NVoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Im0yMzMuMDQsMjE5LjQxYy0xLjc1LDEuNTYtMy40NSwzLjA4LTUuMTIsNC41OCw5Mi4zOSwzNi4wNiwxNzIuNjYsMTEzLjM5LDE4Mi44NywxNjYuMTgsMTMuMjEtNzMuODUsMTkuNTYtMTE0LjYtNTguNTItMTcyLjc4LTY5LjgyLTUyLjAyLTY5Ljc3LTQxLjk5LTExOS4yMiwyLjAxWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0ibTE5OC43OCwzMDQuNDFjMTE3LjAyLDc0LjE5LDIzMi43NSwxNDkuNDMsMTU2LDIyMC4zNiwxMS43Mi05Ljg1LDIwLjQ4LTE5Ljk5LDI3LjE1LTMwLjMzLDI3LjYxLTYyLjkyLTczLjc4LTEyOC42My0xNzYuMTUtMTkzLjUzLTMxLjMtMTkuODQtMTQuMTctNDEuOTEsMzQuMjYtODUsMTYuNTUtMTQuNzIsMjcuNTUtMjUuNjMsMzcuNDktMzEuNy0xMS45OSw0LjU2LTIzLjk5LDE2Ljk2LTQ0LjQ5LDM1LjItNDguNDIsNDMuMDgtNjUuNTUsNjUuMTUtMzQuMjYsODVaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJtMzU0Ljc5LDUyNC43N2MtOTkuNDgsODguOS0xNjQuODEsMTQyLjgxLTE2NC44MSwxNDIuODEsMCwwLTExMi41Ni03My40OC0yOS40Ni0xNTAuMzgsODkuMTYtODIuNTIsMTYzLjktMTI1LjI4LDEwMy41LTE3MC40NC05Mi4zOS02OS4wOSwxMjAuMTYsNTAuMzMsMTIwLjE2LDUwLjMzLDAsMCwyNC43LDc5Ljc4LTI5LjM5LDEyNy42OFoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Im0xNjAuNTIsNTE3LjIxYzg5LjE2LTgyLjUyLDE2My45LTEyNS4yOCwxMDMuNS0xNzAuNDQtNDguODctMzYuNTQtMTIuNDItMjAuMzQsMzIuNzYsMy4wMyw5LjM5LDExLjI5LDE3LjkzLDIyLjAyLDI1LjA3LDMwLjI4LDI5LjQxLDM0LjA1LDE1LjA1LDgxLjM0LTU3Ljc4LDEzMS40Ni03Mi44Miw1MC4xMy0xMzMuMzUsMTE1LjM4LTc0LjA5LDE1Ni4wNSwwLDAtMTEyLjU2LTczLjQ4LTI5LjQ2LTE1MC4zOFoiLz48cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Im0zODQuMTgsMzk3LjA5czI0LjcsNzkuNzgtMjkuMzksMTI3LjY4Yy0xLjA1Ljk0LTIuMDgsMS44NS0zLjEzLDIuNzksNjAuMDQtNTMuMTUtNTQuMDMtMTQ3LjQ4LTgzLjAxLTEwOS45NWgwYzIyLTI2LjQ5LDI1LjQyLTQ4LjM3LTQuNjQtNzAuODUtMy43NS0yLjgtNi45NC01LjI2LTkuNzItNy40Ni0uMjEtMy40My0uMzUtNi44Ni0uNDEtMTAuMjgsMzUuNDIsMTQuNzgsMTMwLjI5LDY4LjA4LDEzMC4yOSw2OC4wOFoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Im0xOTguNzgsMzA0LjQxYzExNy4wMiw3NC4xOSwyMzIuNzUsMTQ5LjQzLDE1NiwyMjAuMzYsNDQuNzctMzcuNTksNDYuMjgtNzkuNTIsNTMuNDItMTIwLjExLDE0LjY1LTgzLjIzLDI3LjEtMTI1LjM5LTU1Ljk0LTE4Ny4yNi02OS44Mi01Mi4wMi02OS43Ny00MS45OS0xMTkuMjIsMi4wMS00OC40Miw0My4wOC02NS41NSw2NS4xNS0zNC4yNiw4NVoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Im0yMzMuMDQsMjE5LjQxYy0xLjc1LDEuNTYtMy40NSwzLjA4LTUuMTIsNC41OCw5Mi4zOSwzNi4wNiwxNzIuNjUsMTEzLjM5LDE4Mi44NywxNjYuMTgsMTMuMjEtNzMuODUsMTkuNTYtMTE0LjYtNTguNTItMTcyLjc4LTY5LjgyLTUyLjAyLTY5Ljc3LTQxLjk5LTExOS4yMiwyLjAxWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0ibTE5OC43OCwzMDQuNDFjMTE3LjAyLDc0LjE5LDIzMi43NSwxNDkuNDMsMTU2LDIyMC4zNiwxMS43My05Ljg1LDIwLjQ4LTE5Ljk5LDI3LjE1LTMwLjMzLDI3LjYxLTYyLjkyLTczLjc4LTEyOC42My0xNzYuMTUtMTkzLjUzLTMxLjMtMTkuODQtMTQuMTctNDEuOTEsMzQuMjYtODUsMTYuNTUtMTQuNzIsMjcuNTUtMjUuNjMsMzcuNDktMzEuNy0xMS45OSw0LjU2LTIzLjk5LDE2Ljk2LTQ0LjQ5LDM1LjItNDguNDIsNDMuMDgtNjUuNTUsNjUuMTUtMzQuMjYsODVaIi8+PC9nPjwvZz48L2c+PC9zdmc+'
@@ -375,7 +434,7 @@ class Plugin
             'seo-automated-link-building-all-links',
             __('All Links', 'seo-automated-link-building'),
             __('All Links', 'seo-automated-link-building'),
-            'manage_options',
+            $this->getUserCapability(),
             'seo-automated-link-building-all-links',
             [$this, 'renderList']
         );
@@ -385,7 +444,7 @@ class Plugin
             'seo-automated-link-building-all-links',
             __('Add New Link', 'seo-automated-link-building'),
             __('Add New Link', 'seo-automated-link-building'),
-            'manage_options',
+            $this->getUserCapability(),
             'seo-automated-link-building-add-link',
             [$this, 'renderAddItem']
         );
@@ -394,7 +453,7 @@ class Plugin
             'seo-automated-link-building-all-links',
             __('Statistic', 'seo-automated-link-building'),
             __('Statistic', 'seo-automated-link-building'),
-            'manage_options',
+            $this->getUserCapability(),
             'seo-automated-link-building-statistic',
             [$this, 'renderStatistic']
         );
@@ -403,7 +462,7 @@ class Plugin
             'seo-automated-link-building-all-links',
             __('Import + Export', 'seo-automated-link-building'),
             __('Import + Export', 'seo-automated-link-building'),
-            'manage_options',
+            $this->getUserCapability(),
             'seo-automated-link-building-import-links',
             [$this, 'renderImport']
         );
@@ -412,11 +471,24 @@ class Plugin
             'seo-automated-link-building-all-links',
             __('Settings'),
             __('Settings'),
-            'manage_options',
+            'manage_options', // only admins
             'seo-automated-link-building-settings',
             [$this, 'renderSettings']
         );
     }
+
+	/**
+	 * @param string $message
+	 * @param string $type
+	 *
+	 * @return void
+	 */
+	public function addAdminMessage($message, $type = 'info') {
+		update_option( 'ilm_admin_message', [
+			'message' => $message,
+			'type'   => $type,
+		] );
+	}
 
     public function setCMIOptions($status, $option, $value)
     {
@@ -555,39 +627,9 @@ class Plugin
 
     public function renderSettings()
     {
-        $settings = Settings::getRaw();
-
         $adminPostUrl = admin_url( 'admin-post.php' );
-
-        // translations
-        $settingsHeadline = __('Settings');
-        $whitelistHeadline = __('Whitelist', 'seo-automated-link-building');
-        $whitelistDescription = __('Only these pages should be changed. One url per line. Optional.', 'seo-automated-link-building');
-        $inputDescription = __('You can use * as wildcard between slashes and ** including slashes.', 'seo-automated-link-building');
-        $blacklistHeadline = __('Blacklist', 'seo-automated-link-building');
-        $blacklistDescription = __('Provide pages which shouldn\'t be changed. One url per line. Optional.', 'seo-automated-link-building');
-        $postTypesHeadline = __('Post types', 'seo-automated-link-building');
-        $postTypesLabel = __('Choose from', 'seo-automated-link-building');
-        $postTypesDescription = __('Provide posttypes for which links should be set. One Post type per line. Optional.', 'seo-automated-link-building');
-        $excludeHeadline = __('Excluded html elements', 'seo-automated-link-building');
-        $excludeExample = __("#example-id\n.example-class", 'seo-automated-link-building');
-        $excludeDescription = __('Provide html selectors for which no links should be set. One selector per line. Optional.', 'seo-automated-link-building');
-        $disableAdminTrackingHeadline = __("Disable Tracking when in Admin-Mode", 'seo-automated-link-building');
-        $disableAdminTrackingDescription = __('Do not track link clicks when logged in.', 'seo-automated-link-building');
-        $disableStatisticsHeadline = __("Disable Statistics", 'seo-automated-link-building');
-        $disableStatisticsDescription = __('Do not track link clicks.', 'seo-automated-link-building');
-        $saveTitle = __('Save');
-
-        // data
-        $whitelist = esc_html($settings['whitelist']);
-        $blacklist = esc_html($settings['blacklist']);
-        $postTypes = esc_html($settings['posttypes']);
-        $exclude = esc_html($settings['exclude']);
-        $disableAdminTracking = (bool) $settings['disableAdminTracking'] ?? false;
-        $disableStatistics = (bool) $settings['disableStatistics'] ?? false;
-        $availablePostTypes = array_keys(get_post_types(['public' => true]));
-
-        include __DIR__ . '/templates/settings.php';
+	    extract(Settings::getFormValues());
+        include __DIR__ . '/templates/settings.php';;
     }
 
     public function renderImport()
@@ -650,6 +692,8 @@ class Plugin
         $link->target = $data['target'] === '_self' ? '_self' : '_blank';
         $link->save();
 
+		do_action('seo_automated_link_added', $link);
+
         wp_redirect( admin_url( "admin.php?page=seo-automated-link-building-all-links" ) );
         exit;
     }
@@ -667,7 +711,8 @@ class Plugin
         if(!current_user_can('upload_files')) {
             return;
         }
-        $ext = array_pop(explode('.', basename($_FILES['file']['name'])));
+		$pieces = explode('.', basename($_FILES['file']['name']));
+        $ext = array_pop($pieces);
         $isCsv = $ext === 'csv';
         $isJson = $ext === 'json';
         if (!$isCsv && !$isJson) {
@@ -691,10 +736,6 @@ class Plugin
 
     public function exportLinks()
     {
-	    if(!current_user_can('upload_files')) {
-		    return;
-	    }
-
         $data = $this->getPostData();
         $ext = sanitize_text_field($data['ext']);
         if($ext === 'csv') {
@@ -709,36 +750,56 @@ class Plugin
         die();
     }
 
-    public function updateSettings()
-    {
-        if (
-            ! isset( $_POST['nonce'] )
-            || ! wp_verify_nonce( $_POST['nonce'], 'seo_automated_link_building_settings' )
-        ) {
-            wp_nonce_ays('not allowed');
-        }
+	public function updateSettings() {
+		if (
+			! isset( $_POST['nonce'] )
+			|| ! wp_verify_nonce( $_POST['nonce'], 'seo_automated_link_building_settings' )
+		) {
+			wp_nonce_ays( 'not allowed' );
+		}
 
-        $data = $this->getPostData(array('whitelist', 'blacklist','posttypes', 'exclude'));
+		$data = $this->getPostData( array(
+			'whitelist',
+			'blacklist',
+			'posttypes',
+			'exclude',
+			'disableStatistics',
+			'disableAdminTracking'
+		) );
 
-        $disableStatistics = $data['disableStatistics'] ?? false;
-        $disableAdminTracking = $data['disableAdminTracking'] ?? false;
+		$disableStatistics    = $data['disableStatistics'] ?? false;
+		$disableAdminTracking = $data['disableAdminTracking'] ?? false;
 
-        Settings::save(array(
-            'whitelist' => implode("\n", array_map(function($text) {
-               return esc_url_raw($text);
-            }, explode("\n", $data['whitelist']))),
-            'blacklist' => implode("\n", array_map(function($text) {
-               return esc_url_raw($text);
-            }, explode("\n", $data['blacklist']))),
-            'posttypes' => sanitize_textarea_field($data['posttypes']),
-            'exclude' => sanitize_textarea_field($data['exclude']),
-            'disableStatistics' => (bool) $disableStatistics,
-            'disableAdminTracking' => (bool) $disableAdminTracking,
-        ));
+		$vars = [];
 
-        wp_redirect( admin_url( "admin.php?page=seo-automated-link-building-settings" ) );
-        exit;
-    }
+		if ( isset( $data['whitelist'] ) ) {
+			$vars = array(
+				'whitelist'            => implode( "\n", array_map( function ( $text ) {
+					return esc_url_raw( $text );
+				}, explode( "\n", $data['whitelist'] ) ) ),
+				'blacklist'            => implode( "\n", array_map( function ( $text ) {
+					return esc_url_raw( $text );
+				}, explode( "\n", $data['blacklist'] ) ) ),
+				'exclude'              => sanitize_textarea_field( $data['exclude'] ),
+				'disableStatistics'    => (bool) $disableStatistics,
+				'disableAdminTracking' => (bool) $disableAdminTracking,
+			);
+		}
+
+		if ( isset( $data['posttypes'] ) ) {
+			$vars['posttypes'] = sanitize_textarea_field( $data['posttypes'] );
+		}
+
+		$vars = apply_filters( 'seo_automated_link_settings_before_update', $vars );
+
+		Settings::save( $vars );
+		if ( strpos( $data['_wp_http_referer'], 'tab=content' ) !== false ) {
+			wp_redirect( admin_url( "admin.php?page=seo-automated-link-building-settings&tab=content" ) );
+		} else {
+			wp_redirect( admin_url( "admin.php?page=seo-automated-link-building-settings" ) );
+		}
+		exit;
+	}
 
     public function trackLink()
     {
@@ -805,7 +866,7 @@ class Plugin
         return null;
     }
 
-    public function changeContent($content)
+    public function changeContent($content, $type = 'post')
     {
         $requestedUrl = $_SERVER['REQUEST_URI'];
         $hostname = $_SERVER['SERVER_NAME'];
@@ -855,7 +916,7 @@ class Plugin
         }
 
         // check posttypes
-        if(!empty($settings['posttypes']) && !in_array(get_post_type(), $settings['posttypes'])) {
+        if($type === 'post' && !empty($settings['posttypes']) && !in_array(get_post_type(), $settings['posttypes'])) {
             return $content;
         }
 

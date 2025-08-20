@@ -11,9 +11,9 @@ namespace SeoAutomatedLinkBuilding;
 
 class Settings
 {
-    private static $domain = 'seo-automated-link-building';
+	protected static $domain = 'seo-automated-link-building';
 
-    private static $defaults = [
+	protected static $defaults = [
         'blacklist' => '',
         'whitelist' => '',
         'posttypes' => '',
@@ -21,6 +21,14 @@ class Settings
         'disableAdminTracking' => false,
         'disableStatistics' => false,
     ];
+
+	public static function getDefaults(): array {
+		return self::$defaults;
+	}
+
+	public static function setDefaults( array $defaults ): void {
+		self::$defaults = $defaults;
+	}
 
     public static function init()
     {
@@ -32,13 +40,45 @@ class Settings
     public static function save(array $values)
     {
         $domain = static::$domain;
-        update_option( "{$domain}_settings", json_encode(array_merge(static::$defaults, $values), JSON_UNESCAPED_UNICODE));
+	    $current = json_decode(get_option( "{$domain}_settings"), true, 512, JSON_UNESCAPED_UNICODE);
+	    $current = is_array($current) ? $current : [];
+	    $changed = update_option( "{$domain}_settings", json_encode(array_merge($current, $values), JSON_UNESCAPED_UNICODE));
+
+	    if($changed) {
+		    update_option('ilm_admin_message', [
+				'message' => esc_html__('Einstellungen gespeichert', Plugin::$domain),
+			    'type' => 'success',
+		    ]);
+	    }
+
+		do_action( "seo_automated_link_settings_saved", $values );
     }
 
+	/**
+	 * @return array
+	 */
     public static function getRaw()
     {
         $domain = static::$domain;
         return array_merge(static::$defaults, json_decode(get_option( "{$domain}_settings"), true, 512, JSON_UNESCAPED_UNICODE));
+    }
+
+	/**
+	 * @return array
+	 */
+	public static function getFormValues()
+    {
+	    $settings = static::getRaw();
+
+		return [
+			'whitelist' => esc_html($settings['whitelist']),
+			'blacklist' => esc_html($settings['blacklist']),
+			'postTypes' => esc_html($settings['posttypes']),
+			'exclude' => esc_html($settings['exclude']),
+			'disableAdminTracking' => (bool) $settings['disableAdminTracking'] ?? false,
+			'disableStatistics' => (bool) $settings['disableStatistics'] ?? false,
+			'availablePostTypes' => array_keys(get_post_types(['public' => true])),
+		];
     }
 
     private static function getLines($str)

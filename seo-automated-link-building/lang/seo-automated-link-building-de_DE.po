@@ -233,6 +233,15 @@ msgstr "Deaktiviert"
 msgid "Statistic"
 msgstr "Statistik"
 
+msgid "Reset statistics"
+msgstr "Statistik zurücksetzen"
+
+msgid "This action cannot be undone. Are you sure?"
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden. Bist du sicher?"
+
+msgid "No Statistic available."
+msgstr "Keine Daten vorhanden"
+
 msgid "Clicks"
 msgstr "Klicks"
 
@@ -319,3 +328,135 @@ msgstr "Groß-/Kleinschreibung beachten"
 
 msgid "Should the keywords be case sensitive?"
 msgstr "Soll die Groß-/Kleinschreibung bei den Schlüsselwörtern beachtet werden?"
+
+msgid "General settings"
+msgstr "Allgemeine Einstellungen"
+
+msgid "3rd party plugins"
+msgstr "Drittanbieter-Plugins"
+
+msgid "Enable Caching"
+msgstr "Caching aktivieren"
+
+msgid "Time to live"
+msgstr "Ablauf-Zeit"
+
+msgid "Set expiration time of cached values in seconds, 86400 (= one day) is used as default"
+msgstr "Nach Ablauf dieser Zeit (in Sekunden) verfällt der Cache-Eintrag. Vorgabe-Wert ist 86400, das entspricht einem Tag"
+
+msgid "Cache Provider"
+msgstr "Cache-Methode"
+
+msgid "Please choose a caching option"
+msgstr "Bitte wählen Sie eine Option"
+
+msgid "Filesystem"
+msgstr "Dateisystem"
+
+msgid "Database"
+msgstr "Datenbank"
+
+msgid "Please select which cache provider you want to use. Disabled options are not available."
+msgstr "Bitte wählen Sie eine Caching Methode. Deaktivierte Optionen sind aktuell nicht verfügbar"
+
+msgid "Could not enable selected caching module, please check if settings are correct."
+msgstr "Das gewählte Caching-Modul konnte nicht aktiviert werden. Bitte prüfen Sie die Einstellungen"
+
+msgid "Please choose a cache provider before enabling caching."
+msgstr "Bitte wählen Sie ein Caching-Modul, bevor Sie das Caching aktivieren"
+
+msgid "Enter the hostname or IP address of the redis server, 127.0.0.1 is used as default"
+msgstr "Geben Sie den Hostnamen oder die IP-Adresse des Redis-Servers ein. Standard: 127.0.0.1"
+
+msgid "Enter the port of the redis server, 6379 is used as default"
+msgstr "Geben Sie den Port des Redis-Servers ein, Standard: 6379."
+
+msgid "Could not use Redis module for caching, please check if settings are correct."
+msgstr "Das Redis-Modul konnte nicht für das Caching verwendet werden. Bitte überprüfen Sie, ob die Einstellungen korrekt sind."
+
+msgid "Could not connect to Redis, please check if settings are correct."
+msgstr "Verbindung zu Redis konnte nicht hergestellt werden. Bitte überprüfen Sie, ob die Einstellungen korrekt sind."
+
+msgid "Enter the hostname or IP address of the memcached service, 127.0.0.1 is used as default"
+msgstr "Geben Sie den Hostnamen oder die IP-Adresse des Memcached-Servers ein. Standard: 127.0.0.1"
+
+msgid "Enter the port of the memcached service, 11211 is used as default"
+msgstr "Geben Sie den Port des Memcached-Servers ein, Standard: 11211"
+
+msgid "(Caching is disabled)"
+msgstr "(Caching ist deaktviert)"
+
+msgid "Short description"
+msgstr "Kurzbeschreibung"
+
+msgid "This css class name will be added to each automatically created link. Optional."
+msgstr "Diese CSS-Klasse wird allen automatisch erzeugten Links zugewiesen"
+
+msgid "Add links to short description"
+msgstr "Links in Artikel-Kurzbeschreibung setzen"
+
+msgid "Link class"
+msgstr "Link Klasse"
+
+msgid "Display processing time"
+msgstr "Verarbeitungszeit anzeigen"
+
+msgid "Shows the time needed to process link replacements on the current page in the bottom left corner. Only visible for logged in admins."
+msgstr "Zeigt die benötigte Zeit für die Ersetzung der Links im Frontend unten links an. Nur für eingeloggte Administratoren sichtbar."
+
+msgid "Disable Statistics"
+msgstr "Statistik deaktivieren"
+
+msgid "Do not track link clicks."
+msgstr "Keine Link-Klicks tracken"
+
+msgid "Process excerpts"
+msgstr "Textauszüge berücksichtigen"
+
+msgid "Add links to excerpts"
+msgstr "Textauszüge von Beiträgen mit Links versehen"
+
+msgid "Category descriptions"
+msgstr "Kategorie-Beschreibungen"
+
+msgid "Add links to category descriptions"
+msgstr "Links in Kategorie-Beschreibungen setzen"
+
+msgid "Custom Fields"
+msgstr "Benutzerdefinierte Felder"
+
+msgid "Selection"
+msgstr "Optionen"
+
+msgid "Add links to products short description"
+msgstr "Links zur Kurzbeschreibung des Artikels hinzufügen"
+
+msgid "Add links to category description"
+msgstr "Links zu Kategoriebeschreibungen hinzufügen"
+
+msgid "Add links to product tag description"
+msgstr "Links zur Beschreibung von Artikel-Tags hinzufügen"
+
+msgid "Permissions"
+msgstr "Berechtigungen"
+
+msgid "Here you can specify which users can manage the links. While normal users can only manage the links themselves, all Administrators can manage all settings"
+msgstr "Hier wird festgelegt, welche User Zugriff auf die Link-Verwaltung haben. Während normale User nur die Links selbst bearbeiten können, haben alle Administratoren vollen Zugriff auf alle Einstellungen."
+
+msgid "<strong>Please note:</strong> if a group (e.g. Editor) is selected, all users in this group will have access to the links, even if they are not individually checked."
+msgstr "<strong>Achtung:</strong> wird eine Gruppe (z.B. Autor) gewählt, haben alle User dieser Gruppe Zugriff auf die Links, auch wenn sie nicht einzeln angehakt sind."
+
+msgid "Role / User"
+msgstr "Rolle / Benutzer"
+
+msgid "Custom field"
+msgstr "Beispiel-Feld"
+
+msgid "ACF Sample Group"
+msgstr "ACF Beispiel-Gruppe"
+
+msgid "ACF Sample Field"
+msgstr "ACF Beispiel-Feld"
+
+msgid "No advanced custom fields found"
+msgstr "Keine Advanced Custom Fields vorhanden"
