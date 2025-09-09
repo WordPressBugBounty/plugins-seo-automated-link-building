@@ -4,7 +4,7 @@ Tags: seo, link building, search engine optimization, user experience, internal 
 Requires PHP: 7.4
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,9 @@ We are grateful for every help. Simply send us an Email to contact@internal-link
 2. Navigate to "Internal Links Manager" in your WordPress admin menu and add your first link.
 
 == Changelog ==
+
+= 3.0.1 =
+* Added plugin uri to header
 
 = 3.0.0 =
 * Compatibility to Wordpress 6.8
