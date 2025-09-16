@@ -736,6 +736,10 @@ class Plugin
 
     public function exportLinks()
     {
+	    if(!current_user_can('upload_files')) {
+		    return;
+	    }
+
         $data = $this->getPostData();
         $ext = sanitize_text_field($data['ext']);
         if($ext === 'csv') {
