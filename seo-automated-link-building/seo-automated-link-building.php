@@ -4,7 +4,7 @@
 Plugin Name: Internal Links Manager
 Plugin URI:  https://internal-links-manager.com
 Description: Build internal links easily.
-Version:     3.0.2
+Version:     3.0.3
 Author:      webraketen
 Author URI:  https://www.webraketen.io
 License:     GPLv2 or later
