@@ -88,20 +88,35 @@ class Statistic_List extends \WP_List_Table
         return '<input type="checkbox" name="post[]" value="all" checked>' . $item->{$column_name};
     }
 
-    protected function column_title($item)
-    {
-        return "<strong>{$item->title}</strong>";
-    }
+	protected function column_title($item)
+	{
+		return sprintf(
+			'<strong>%s</strong>',
+			esc_html($item->title)
+		);
+	}
 
-    protected function column_source_url($item)
-    {
-        return "<a href='{$item->source_url}' target='_blank'>{$item->source_url}</strong>";
-    }
+	protected function column_source_url($item)
+	{
+		$url = (string) $item->source_url;
 
-    protected function column_destination_url($item)
-    {
-        return "<a href='{$item->destination_url}' target='_blank'>{$item->destination_url}</strong>";
-    }
+		return sprintf(
+			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+			esc_url($url),
+			esc_html($url)
+		);
+	}
+
+	protected function column_destination_url($item)
+	{
+		$url = (string) $item->destination_url;
+
+		return sprintf(
+			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+			esc_url($url),
+			esc_html($url)
+		);
+	}
 
     public function no_items() {
         _e( 'No Statistic available.', Plugin::$domain );
@@ -121,7 +136,6 @@ class Statistic_List extends \WP_List_Table
 	    echo '<a href="' . esc_url($reset_url) . '" class="button button-danger" onclick="return confirm(\''
 	         . esc_js(__('This action cannot be undone. Are you sure?', Plugin::$domain)) . '\')">'
 	         . esc_html(__('Reset statistics', Plugin::$domain)) . '</a>';
-	    echo '</div>';
 
 	    $this->search_box(__('Search'), Plugin::$domain);
         parent::display();

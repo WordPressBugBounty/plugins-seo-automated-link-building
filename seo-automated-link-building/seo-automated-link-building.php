@@ -4,7 +4,7 @@
 Plugin Name: Internal Links Manager
 Plugin URI:  https://internal-links-manager.com
 Description: Build internal links easily.
-Version:     3.0.3
+Version:     3.0.4
 Author:      webraketen
 Author URI:  https://www.webraketen.io
 License:     GPLv2 or later
@@ -22,23 +22,24 @@ if ( function_exists( 'ilm_fs' ) ) {
                 // Include Freemius SDK.
                 require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
                 $ilm_fs = fs_dynamic_init( array(
-                    'id'             => '12495',
-                    'slug'           => 'seo-automated-link-building',
-                    'premium_slug'   => 'internal-links-manager',
-                    'type'           => 'plugin',
-                    'public_key'     => 'pk_5093aa5cd0d80ea48987b64e63c76',
-                    'is_premium'     => false,
-                    'premium_suffix' => 'Pro Plan',
-                    'has_addons'     => false,
-                    'has_paid_plans' => true,
-                    'trial'          => array(
+                    'id'               => '12495',
+                    'slug'             => 'seo-automated-link-building',
+                    'premium_slug'     => 'internal-links-manager',
+                    'type'             => 'plugin',
+                    'public_key'       => 'pk_5093aa5cd0d80ea48987b64e63c76',
+                    'is_premium'       => false,
+                    'premium_suffix'   => 'Pro Plan',
+                    'has_addons'       => false,
+                    'has_paid_plans'   => true,
+                    'trial'            => array(
                         'days'               => 10,
                         'is_require_payment' => false,
                     ),
-                    'menu'           => array(
+                    'menu'             => array(
                         'slug' => 'seo-automated-link-building-all-links',
                     ),
-                    'is_live'        => true,
+                    'is_live'          => true,
+                    'is_org_compliant' => true,
                 ) );
             }
             return $ilm_fs;
