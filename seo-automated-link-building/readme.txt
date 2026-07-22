@@ -4,7 +4,7 @@ Tags: seo, link building, search engine optimization, user experience, internal 
 Requires PHP: 7.4
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,9 @@ We’re sorry that you’ve encountered a problem – your feedback is extremely
 2. Configuration page for automated keyword linking.
 
 == Changelog ==
+
+= 3.1.1 =
+* Fix: Missing File included
 
 = 3.1.0 =
 * Extended category settings, allowing to include / exclude certain categories
