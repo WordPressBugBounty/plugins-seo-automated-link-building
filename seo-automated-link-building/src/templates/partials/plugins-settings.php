@@ -4,18 +4,18 @@
         <td colspan="2"><h3>WooCommerce</h3></td>
     </tr>
     <tr class="disabled" data-tooltip="<?php esc_attr_e( 'Pro-Feature', 'seo-automated-link-building' ); ?>">
-        <th><?php print __( "Selection", 'seo-automated-link-building' ) ?></th>
+        <th><?php esc_html_e( 'Selection', 'seo-automated-link-building' ); ?></th>
         <td>
             <label>
-                <input type="checkbox" disabled="disabled"> <?php print __( 'Add links to products short description', 'seo-automated-link-building' ) ?>
+                <input type="checkbox" disabled="disabled"> <?php esc_html_e( 'Add links to products short description', 'seo-automated-link-building' ); ?>
             </label>
             <br>
             <label>
-                <input type="checkbox" disabled="disabled"> <?php print __( 'Add links to category description', 'seo-automated-link-building' ) ?>
+                <input type="checkbox" disabled="disabled"> <?php esc_html_e( 'Add links to category description', 'seo-automated-link-building' ); ?>
             </label>
             <br>
             <label>
-                <input type="checkbox" disabled="disabled"> <?php print __( 'Add links to product tag description', 'seo-automated-link-building' ) ?>
+                <input type="checkbox" disabled="disabled"> <?php esc_html_e( 'Add links to product tag description', 'seo-automated-link-building' ); ?>
             </label>
         </td>
     </tr>
@@ -61,11 +61,11 @@
 		if ( ! empty( $group['fields'] ) ) {
 			?>
             <tr  class="disabled" data-tooltip="<?php esc_attr_e( 'Pro-Feature', 'seo-automated-link-building' ); ?>">
-                <th><?php echo $group['name'] ?></th>
+                <th><?php echo esc_html( $group['name'] ); ?></th>
                 <td>
 					<?php foreach ( $group['fields'] as $field ): ?>
                         <label>
-                            <input type="checkbox" disabled="disabled" /> <?php echo $field['name'] ?>
+                            <input type="checkbox" disabled="disabled" /> <?php echo esc_html( $field['name'] ); ?>
                         </label><br>
 					<?php endforeach; ?>
                 </td>

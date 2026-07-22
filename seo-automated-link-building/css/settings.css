@@ -78,3 +78,30 @@ tr[data-tooltip]:hover::after {
     border-color: #dc3232 !important;
     box-shadow: 0 0 2px rgba(220, 50, 50, .8);
 }
+
+.ilm-settings .checkbox-list,
+.ilm-settings .category-list {
+    display: inline-block;
+    min-width: 380px;
+    max-height: 220px;
+    overflow: auto;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    padding: 8px 8px 12px 8px;
+}
+
+.ilm-settings .category-list li {
+    list-style-type: none;
+    margin: 6px 0 !important;
+}
+
+.ilm-settings .category-list li ul {
+    margin: 6px 0 !important;
+}
+
+.ilm-settings .category-list li.level-0 { padding-left: 0; }
+.ilm-settings .category-list li.level-1 { padding-left: 1rem; }
+.ilm-settings .category-list li.level-2 { padding-left: 2rem; }
+.ilm-settings .category-list li.level-3 { padding-left: 3rem; }
+.ilm-settings .category-list li.level-4 { padding-left: 4rem; }
+.ilm-settings .category-list li.level-5 { padding-left: 5rem; }

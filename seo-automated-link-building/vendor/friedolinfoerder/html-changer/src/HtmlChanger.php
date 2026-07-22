@@ -563,7 +563,7 @@ class HtmlChanger
 
     // PUBLIC METHODS
 
-    public function parts($onlyText = false, array $excludeElements = null)
+    public function parts($onlyText = false, ?array $excludeElements = null)
     {
         if(!empty($excludeElements)) {
             $nodes = [];

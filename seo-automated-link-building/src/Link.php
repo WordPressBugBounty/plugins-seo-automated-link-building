@@ -23,19 +23,20 @@ namespace SeoAutomatedLinkBuilding;
 use wp_activerecord\ActiveRecord;
 
 /**
- * @property integer id
- * @property string title
- * @property string titleattr
- * @property string keywords
- * @property string url
- * @property integer num
- * @property boolean nofollow
- * @property boolean notitle
- * @property boolean active
- * @property boolean partly_match
- * @property boolean case_sensitive
- * @property string target
- * @property integer priority
+ * @property integer $id
+ * @property string $title
+ * @property string $titleattr
+ * @property string $keywords
+ * @property string $url
+ * @property integer $num
+ * @property bool $nofollow
+ * @property bool $notitle
+ * @property bool $active
+ * @property bool $partly_match
+ * @property bool $case_sensitive
+ * @property string $target
+ * @property integer $priority
+ * @property integer|null $page_id
  */
 class Link extends ActiveRecord
 {
@@ -98,6 +99,10 @@ class Link extends ActiveRecord
             }
         }
 
+        if(empty($keywords)) {
+            return null;
+        }
+
         // create regex strings out of keywords
         $self = $this;
         $keywords = array_map(function($str) use($self) {
@@ -129,8 +134,10 @@ class Link extends ActiveRecord
         $dataHash = "internallinksmanager029f6b8e52c";
         $attrs = [
             'href' => $url,
-            "data-$dataHash" => $this->id,
         ];
+        if ( empty( $this->settings['disableStatistics'] ) ) {
+            $attrs["data-$dataHash"] = $this->id;
+        }
 
 	    if(!empty($this->settings['cssLinkClass'])) {
 		    $attrs['class'] = $this->settings['cssLinkClass'];

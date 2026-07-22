@@ -11,7 +11,7 @@ Dropzone.options.importForm = {
     }
   },
   success: function(file, response) {
-    console.log(file, response);
+    //console.log(file, response);
     window.location.href = seoAutomatedLinkBuildingImport.redirectUrl;
   }
 };

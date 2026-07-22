@@ -20,6 +20,8 @@
 namespace SeoAutomatedLinkBuilding;
 
 
+use WooCommerce\PayPalCommerce\AdminNotices\AdminNotices;
+
 class Plugin
 {
     protected $name;
@@ -47,8 +49,9 @@ class Plugin
         }
         $page = null;
         $link = null;
-        $id = isset($_GET['id']) && ctype_digit($_GET['id']) ? (int)$_GET['id'] : null;
-        if($id && !isset($_GET['action'])) {
+        $id = isset($_GET['id']) && ctype_digit($_GET['id']) ? (int)$_GET['id'] : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+        if($id && !isset($_GET['action'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            /** @var Link|null $link */
             $link = Link::get($id);
             if($link && $link->page_id) {
                 $page = Post::query()
@@ -92,7 +95,7 @@ class Plugin
             return $this->statisticData;
         }
 
-        $list = new Statistic_List('seo-automated-link-building');
+        $list = new StatisticList();
         $list->preDisplay();
 
         $maxDays = 28;
@@ -147,7 +150,7 @@ class Plugin
     protected function getPostData($strip = array())
     {
         if(empty($strip)) {
-            return $_POST;
+            return $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
         }
         $stripIndex = array_flip($strip);
         // we dont want to have magic quotes, so removed them form input, but don't change $_POST directly
@@ -155,7 +158,7 @@ class Plugin
         // in addition all data returned by this function will be sanitized and/or validated to ensure security
         // ActiveRecord implementation will quote text for safe database entries
         $data = array();
-        foreach($_POST as $key => $value) {
+        foreach($_POST as $key => $value) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
             $data[$key] = array_key_exists($key, $stripIndex) ? stripslashes_deep($value) : $value;
         }
         return $data;
@@ -181,6 +184,8 @@ class Plugin
             add_action( 'admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
             add_action( 'wp_ajax_seo_automated_link_building_track_link', [$this, 'trackLink'] );
 	        add_action( 'admin_notices', [$this, 'displayAdminMessage']);
+
+	        UpgradeNotice::init();
         }
 
         add_action( 'wp_ajax_nopriv_seo_automated_link_building_track_link', [$this, 'trackLink'] );
@@ -232,8 +237,8 @@ class Plugin
             return;
         }
         if($hook_suffix === 'toplevel_page_seo-automated-link-building-all-links') {
-            $action = isset($_POST['action']) ? sanitize_text_field($_POST['action']) : '';
-            $ids = isset($_REQUEST['id']) ? wp_parse_id_list($_REQUEST['id']) : null;
+            $action = isset($_POST['action']) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+            $ids = isset($_REQUEST['id']) ? wp_parse_id_list( wp_unslash( $_REQUEST['id'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             if(is_null($ids) || empty($ids)) {
                 return;
             }
@@ -354,7 +359,9 @@ class Plugin
         $domain = static::$domain;
 
         // transform keywords to json
+        // @codeCoverageIgnoreStart
         if(version_compare(get_option( "{$domain}_db_version" ), '1.0.6') === -1) {
+            /** @var Link[] $links */
             $links = Link::get();
             foreach($links as $link) {
                 $link->keywords = json_encode(array_map(function($item) {
@@ -363,6 +370,7 @@ class Plugin
                 $link->save();
             }
         }
+        // @codeCoverageIgnoreEnd
 
         update_option( "{$domain}_db_version", $this->dbVersion );
     }
@@ -377,8 +385,8 @@ class Plugin
 	public function displayAdminMessage() {
 		$option = get_option( 'ilm_admin_message' );
 		if ( isset( $option['message'] ) ) {
-			echo "<div class='notice notice-" . $option['type'] . " is-dismissible'>";
-			echo "<p>{$option['message']}</p>";
+			echo "<div class='notice notice-" . esc_attr( $option['type'] ) . " is-dismissible'>";
+			echo '<p>' . wp_kses_post( $option['message'] ) . '</p>';
 			echo "</div>";
 
 			delete_option( 'ilm_admin_message' );
@@ -401,8 +409,8 @@ class Plugin
         $table_name_links = $wpdb->prefix . str_replace('-', '_', 'seo-automated-link-building');
         $table_name_statistic = $wpdb->prefix . str_replace('-', '_', 'seo-automated-link-building') . '_statistic';
         // delete tables in reverse order
-        $wpdb->query("DROP TABLE IF EXISTS $table_name_statistic");
-        $wpdb->query("DROP TABLE IF EXISTS $table_name_links");
+        $wpdb->query("DROP TABLE IF EXISTS $table_name_statistic"); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $wpdb->query("DROP TABLE IF EXISTS $table_name_links"); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
         $domain = static::$domain;
         delete_option("{$domain}_db_version");
@@ -518,13 +526,13 @@ class Plugin
             $linksPerPage = $screen->get_option('per_page', 'default');
         }
 
-        $list = new Links_List('seo-automated-link-building');
+        $list = new LinksList();
         $list->setLimit($linksPerPage);
 
         // logic
-        $hasActiveFlag = isset($_REQUEST['active']);
-        $onlyActive = $hasActiveFlag && $_REQUEST['active'] === '1';
-        $onlyInactive = $hasActiveFlag && $_REQUEST['active'] === '0';
+        $hasActiveFlag = isset($_REQUEST['active']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $onlyActive = $hasActiveFlag && $_REQUEST['active'] === '1'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $onlyInactive = $hasActiveFlag && $_REQUEST['active'] === '0'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         // translations
         $linksHeadline = __('All Links', 'seo-automated-link-building');
@@ -608,14 +616,14 @@ class Plugin
         $saveTitle = __('Save');
 
         // data
-        $pageTitle = $link->title;
-        $id = esc_attr($link->id);
-        $title = esc_attr($link->title);
+        $pageTitle = $title;
+        $id = esc_attr((string) $link->id);
+        $linkTitle = esc_attr($link->title);
         $url = esc_attr($link->url);
-        $pageId = esc_attr($link->page_id ? $link->page_id : '');
+        $pageId = esc_attr($link->page_id ? (string) $link->page_id : '');
         $titleattr = esc_attr($link->titleattr ? $link->titleattr : '');
-        $num = esc_attr($link->num);
-        $priority = esc_attr($link->priority);
+        $num = esc_attr((string) $link->num);
+        $priority = esc_attr((string) $link->priority);
         $notitle = $link->notitle;
         $follow = !$link->nofollow;
         $partlyMatch = $link->partly_match;
@@ -663,7 +671,7 @@ class Plugin
     {
         if (
             ! isset( $_POST['nonce'] )
-            || ! wp_verify_nonce( $_POST['nonce'], 'seo_automated_link_building_add_link' )
+            || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['nonce'] ) ), 'seo_automated_link_building_add_link' )
         ) {
             wp_nonce_ays('not allowed');
         }
@@ -695,23 +703,26 @@ class Plugin
 		do_action('seo_automated_link_added', $link);
 
         wp_redirect( admin_url( "admin.php?page=seo-automated-link-building-all-links" ) );
-        exit;
+        exit; // @codeCoverageIgnore
     }
 
     public function importLinks()
     {
         if (
             ! isset( $_POST['nonce'] )
-            || ! wp_verify_nonce( $_POST['nonce'], 'seo_automated_link_building_import_links' )
+            || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['nonce'] ) ), 'seo_automated_link_building_import_links' )
         ) {
             wp_nonce_ays('not allowed');
         }
 
-        $filePath = $_FILES['file']['tmp_name'];
+        if ( ! isset( $_FILES['file']['tmp_name'] ) || ! isset( $_FILES['file']['name'] ) ) {
+            return;
+        }
+        $filePath = $_FILES['file']['tmp_name']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- server-assigned temp path
         if(!current_user_can('upload_files')) {
             return;
         }
-		$pieces = explode('.', basename($_FILES['file']['name']));
+        $pieces = explode( '.', basename( sanitize_file_name( wp_unslash( $_FILES['file']['name'] ) ) ) );
         $ext = array_pop($pieces);
         $isCsv = $ext === 'csv';
         $isJson = $ext === 'json';
@@ -730,7 +741,7 @@ class Plugin
         }
 
 		if(ImportExport::hasErrors()) {
-			wp_die( ImportExport::getErrors(), 400);
+			wp_die( wp_kses_post( implode( '', ImportExport::getErrors() ) ), 400);
 		}
     }
 
@@ -740,24 +751,26 @@ class Plugin
 		    return;
 	    }
 
+        // @codeCoverageIgnoreStart
         $data = $this->getPostData();
         $ext = sanitize_text_field($data['ext']);
         if($ext === 'csv') {
             header('Content-Disposition: attachment; filename=internal-link-manager.csv');
             header('Content-Type: text/csv; charset=utf-8');
-            print ImportExport::exportAllLinksAsCsv($data['separator']);
+            print ImportExport::exportAllLinksAsCsv($data['separator']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV file download
         } elseif($ext === 'json') {
             header('Content-Disposition: attachment; filename=internal-link-manager.json');
             header('Content-Type: text/csv; charset=utf-8');
-            print ImportExport::exportAllLinksAsJson();
+            print ImportExport::exportAllLinksAsJson(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON file download
         }
         die();
+        // @codeCoverageIgnoreEnd
     }
 
 	public function updateSettings() {
 		if (
 			! isset( $_POST['nonce'] )
-			|| ! wp_verify_nonce( $_POST['nonce'], 'seo_automated_link_building_settings' )
+			|| ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['nonce'] ) ), 'seo_automated_link_building_settings' )
 		) {
 			wp_nonce_ays( 'not allowed' );
 		}
@@ -802,12 +815,17 @@ class Plugin
 		} else {
 			wp_redirect( admin_url( "admin.php?page=seo-automated-link-building-settings" ) );
 		}
-		exit;
+		exit; // @codeCoverageIgnore
 	}
 
     public function trackLink()
     {
         ignore_user_abort(true);
+
+        $settings = Settings::get();
+        if ( ! empty( $settings['disableStatistics'] ) ) {
+            wp_die();
+        }
 
         $data = $this->getPostData(array('title', 'source_url', 'destination_url'));
 
@@ -817,7 +835,6 @@ class Plugin
         if(!$id) {
             // if not valid, return
             wp_die();
-            return;
         }
 
         Statistic::create([
@@ -872,8 +889,8 @@ class Plugin
 
     public function changeContent($content, $type = 'post')
     {
-        $requestedUrl = $_SERVER['REQUEST_URI'];
-        $hostname = $_SERVER['SERVER_NAME'];
+        $requestedUrl = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+        $hostname = isset( $_SERVER['SERVER_NAME'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_NAME'] ) ) : '';
         $settings = Settings::get();
 
         global $wp;
@@ -920,12 +937,27 @@ class Plugin
         }
 
         // check posttypes
-        if($type === 'post' && !empty($settings['posttypes']) && !in_array(get_post_type(), $settings['posttypes'])) {
+	    $db_post_type = get_post_type();
+        if($type === 'post' && !empty($settings['posttypes']) && !in_array($db_post_type, $settings['posttypes'])) {
             return $content;
         }
 
-        $links = Link::query()->where('active', true)->order_by('priority', 'desc')->get();
-        global $post;
+	    global $post;
+
+		// check post categories
+	    if ($db_post_type === 'post' && isset($settings['content']['categoriesMode']) && $settings['content']['categoriesMode'] !== 'all' && !empty($post->ID)) {
+			$post_categories = wp_get_post_categories($post->ID);
+
+		    $hasMatch = !empty(array_intersect($settings['content']['selectedCategories'], $post_categories));
+
+			if ($settings['content']['categoriesMode'] === 'include' && !$hasMatch) {
+				return $content;
+			} elseif ($settings['content']['categoriesMode'] === 'exclude' && $hasMatch) {
+				return $content;
+			}
+        }
+
+        $links = Link::query()->where('active', true)->order_by('priority', 'asc')->get();
         $links = array_filter($links, function(Link $link) use($possibleUrls, $hostname, $post) {
             if($link->page_id) {
                 // link uses post id

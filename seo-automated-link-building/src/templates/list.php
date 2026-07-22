@@ -19,14 +19,14 @@
 ?>
 
 <div class="wrap">
-    <h1 class="wp-heading-inline"><?php print $linksHeadline ?></h1>
-    <a href="admin.php?page=seo-automated-link-building-add-link" class="page-title-action"><?php print $addNewHeadline ?></a>
+    <h1 class="wp-heading-inline"><?php echo esc_html( $linksHeadline ); ?></h1>
+    <a href="admin.php?page=seo-automated-link-building-add-link" class="page-title-action"><?php echo esc_html( $addNewHeadline ); ?></a>
     <hr class="wp-header-end">
     <h2 class="screen-reader-text">Seitenliste filtern</h2>
     <ul class="subsubsub">
-        <li class="all"><a href="?page=seo-automated-link-building-all-links" <?php if(!$hasActiveFlag): ?>class="current"<?php endif ?>><?php print $allTitle ?> <span class="count">(<?php print $linksCount ?>)</span></a> |</li>
-        <li class="active"><a href="?page=seo-automated-link-building-all-links&active=1" <?php if($onlyActive): ?>class="current"<?php endif ?>><?php print $activeTitle ?> <span class="count">(<?php print $activeLinksCount ?>)</span></a> |</li>
-        <li class="deactivated"><a href="?page=seo-automated-link-building-all-links&active=0" <?php if($onlyInactive): ?>class="current"<?php endif ?>><?php print $inactiveTitle ?> <span class="count">(<?php print $inactiveLinksCount ?>)</span></a></li>
+        <li class="all"><a href="?page=seo-automated-link-building-all-links" <?php if(!$hasActiveFlag): ?>class="current"<?php endif ?>><?php echo esc_html( $allTitle ); ?> <span class="count">(<?php echo absint( $linksCount ); ?>)</span></a> |</li>
+        <li class="active"><a href="?page=seo-automated-link-building-all-links&active=1" <?php if($onlyActive): ?>class="current"<?php endif ?>><?php echo esc_html( $activeTitle ); ?> <span class="count">(<?php echo absint( $activeLinksCount ); ?>)</span></a> |</li>
+        <li class="deactivated"><a href="?page=seo-automated-link-building-all-links&active=0" <?php if($onlyInactive): ?>class="current"<?php endif ?>><?php echo esc_html( $inactiveTitle ); ?> <span class="count">(<?php echo absint( $inactiveLinksCount ); ?>)</span></a></li>
     </ul>
     <form method="post">
         <?php $list->display() ?>

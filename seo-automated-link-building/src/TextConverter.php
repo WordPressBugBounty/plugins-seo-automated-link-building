@@ -30,22 +30,7 @@ class TextConverter {
     /**
      * @var string
      */
-    private $startText;
-
-    /**
-     * @var string
-     */
     private $text;
-
-    /**
-     * @var array
-     */
-    private $counts = [];
-
-    /**
-     * @var array
-     */
-    private $links = [];
 
     /**
      * TextConverter constructor.
@@ -53,7 +38,6 @@ class TextConverter {
      */
     public function __construct($text)
     {
-        $this->startText = $text;
         $this->text = $text;
     }
 
@@ -120,7 +104,7 @@ class TextConverter {
         ]);
 
         $htmlChanger->replace(function($text, Link $link) {
-            return $link->getReplaceString($text);
+            return $this->replaceText($text, $link);
         });
 
         $this->text = $htmlChanger->html();

@@ -209,8 +209,14 @@ msgstr "Wie bewertest du das Plugin?"
 msgid "Post types"
 msgstr "Post-Types"
 
-msgid "Provide posttypes for which links should be set. One Post type per line. Optional."
-msgstr "Gib Post-Types an, für die Links gesetzt werden. Ein Post-Type pro Zeile. Optional."
+msgid "Post types are used by Wordpress to classify different kinds of content."
+msgstr "Post-Types werden von Wordpress verwendet, um verschiedene Arten von Inhalten zu klassifizieren."
+
+msgid "Provide post types for which links should be set. One post type per line. Optional."
+msgstr "Gib die Post-Types an, für die Links gesetzt werden sollen. Ein Post-Type pro Zeile. Optional."
+
+msgid "If unsure, leave empty and links will be set in all post types."
+msgstr "Wenn du unsicher bist, lass das Feld leer. Dann werden die Links in allen Post-Types gesetzt."
 
 msgid "Only these pages should be changed. One url per line. Optional."
 msgstr "Nur bei diesen Seite sollen Links hinzugefügt werden. Eine Url pro Zeile. Optional."
@@ -348,7 +354,7 @@ msgid "Cache Provider"
 msgstr "Cache-Methode"
 
 msgid "Please choose a caching option"
-msgstr "Bitte wählen Sie eine Option"
+msgstr "Bitte wähle eine Option"
 
 msgid "Filesystem"
 msgstr "Dateisystem"
@@ -357,31 +363,31 @@ msgid "Database"
 msgstr "Datenbank"
 
 msgid "Please select which cache provider you want to use. Disabled options are not available."
-msgstr "Bitte wählen Sie eine Caching Methode. Deaktivierte Optionen sind aktuell nicht verfügbar"
+msgstr "Bitte wähle eine Caching Methode. Deaktivierte Optionen sind aktuell nicht verfügbar"
 
 msgid "Could not enable selected caching module, please check if settings are correct."
-msgstr "Das gewählte Caching-Modul konnte nicht aktiviert werden. Bitte prüfen Sie die Einstellungen"
+msgstr "Das gewählte Caching-Modul konnte nicht aktiviert werden. Bitte prüfe die Einstellungen"
 
 msgid "Please choose a cache provider before enabling caching."
-msgstr "Bitte wählen Sie ein Caching-Modul, bevor Sie das Caching aktivieren"
+msgstr "Bitte wähle ein Caching-Modul, bevor du das Caching aktivierst"
 
 msgid "Enter the hostname or IP address of the redis server, 127.0.0.1 is used as default"
-msgstr "Geben Sie den Hostnamen oder die IP-Adresse des Redis-Servers ein. Standard: 127.0.0.1"
+msgstr "Gib den Hostnamen oder die IP-Adresse des Redis-Servers ein. Standard: 127.0.0.1"
 
 msgid "Enter the port of the redis server, 6379 is used as default"
-msgstr "Geben Sie den Port des Redis-Servers ein, Standard: 6379."
+msgstr "Gib den Port des Redis-Servers ein, Standard: 6379."
 
 msgid "Could not use Redis module for caching, please check if settings are correct."
-msgstr "Das Redis-Modul konnte nicht für das Caching verwendet werden. Bitte überprüfen Sie, ob die Einstellungen korrekt sind."
+msgstr "Das Redis-Modul konnte nicht für das Caching verwendet werden. Bitte überprüfe, ob die Einstellungen korrekt sind."
 
 msgid "Could not connect to Redis, please check if settings are correct."
-msgstr "Verbindung zu Redis konnte nicht hergestellt werden. Bitte überprüfen Sie, ob die Einstellungen korrekt sind."
+msgstr "Verbindung zu Redis konnte nicht hergestellt werden. Bitte überprüfe, ob die Einstellungen korrekt sind."
 
 msgid "Enter the hostname or IP address of the memcached service, 127.0.0.1 is used as default"
-msgstr "Geben Sie den Hostnamen oder die IP-Adresse des Memcached-Servers ein. Standard: 127.0.0.1"
+msgstr "Gib den Hostnamen oder die IP-Adresse des Memcached-Servers ein. Standard: 127.0.0.1"
 
 msgid "Enter the port of the memcached service, 11211 is used as default"
-msgstr "Geben Sie den Port des Memcached-Servers ein, Standard: 11211"
+msgstr "Gib den Port des Memcached-Servers ein, Standard: 11211"
 
 msgid "(Caching is disabled)"
 msgstr "(Caching ist deaktviert)"
@@ -422,8 +428,38 @@ msgstr "Kategorie-Beschreibungen"
 msgid "Add links to category descriptions"
 msgstr "Links in Kategorie-Beschreibungen setzen"
 
+msgid "Tag descriptions"
+msgstr "Schlagwort-Beschreibungen"
+
+msgid "Add links to tag descriptions"
+msgstr "Links in Schlagwort-Beschreibungen setzen"
+
+msgid "Category selection"
+msgstr "Kategorie-Auswahl"
+
+msgid "Set links in all categories"
+msgstr "Alle Kategorien einbeziehen"
+
+msgid "Set links only in certain categories"
+msgstr "Nur in ausgewählten Kategorien Links setzen"
+
+msgid "Exclude certain categories"
+msgstr "In ausgewählten Kategorien keine Links setzen"
+
+msgid "Please specify whether the link should be restricted to certain categories."
+msgstr "Bitte wähle, ob die Verlinkung auf bestimmte Kategorien beschränkt werden soll"
+
+msgid "Include categories"
+msgstr "Links setzen in:"
+
+msgid "Exclude categories"
+msgstr "Keine Links setzen in:"
+
 msgid "Custom Fields"
 msgstr "Benutzerdefinierte Felder"
+
+msgid "Please select the custom fields in which links should be created automatically"
+msgstr "Bitte wähle die benutzerdefinierten Felder aus, in denen automatisch Links erstellt werden sollen"
 
 msgid "Selection"
 msgstr "Optionen"
@@ -460,3 +496,12 @@ msgstr "ACF Beispiel-Feld"
 
 msgid "No advanced custom fields found"
 msgstr "Keine Advanced Custom Fields vorhanden"
+
+msgid "Got 60 Seconds?"
+msgstr "Hast du eine Minute?"
+
+msgid "Help us make the Internal Links Manager even better for your workflow. Share your feedback in our quick <a href=\"https://forms.gle/bVNDBcVbf5s3mTDe8\" target=\"_blank\">user survey</a>!"
+msgstr "Hilf uns, den Internal Links Manager zu verbessern. Teile uns deine Meinung in unserer kurzen <a href=\"https://forms.gle/bVNDBcVbf5s3mTDe8\">User-Befragung</a> mit!"
+
+msgid "Get involved now"
+msgstr "Jetzt mitmachen"

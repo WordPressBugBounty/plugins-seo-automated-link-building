@@ -39,6 +39,8 @@ class ImportExport {
 
 		$separator = '';
 		$updated = 0;
+		$header = [];
+		$idIndex = 0;
         foreach(preg_split("/((\r?\n)|(\r\n?))/", $str) as $i => $line) {
 
 			// determine separator in header line
@@ -150,7 +152,7 @@ class ImportExport {
         return static::_exportJson($links);
     }
 
-    private static function _exportCsv(array $links, string $separator = ';') {
+    protected static function _exportCsv(array $links, string $separator = ';') {
         // output up to 5MB is kept in memory, if it becomes bigger it will automatically be written to a temporary file
         $csv = fopen('php://temp/maxmemory:'. (5*1024*1024), 'r+');
         // set UTF-8 bom header
@@ -171,7 +173,7 @@ class ImportExport {
         return $output;
     }
 
-    private static function _exportJson(array $links) {
+    protected static function _exportJson(array $links) {
         return json_encode($links, JSON_UNESCAPED_UNICODE);
     }
 

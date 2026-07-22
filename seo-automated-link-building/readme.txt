@@ -3,71 +3,78 @@ Contributors: webraketen, freemius
 Tags: seo, link building, search engine optimization, user experience, internal links,
 Requires PHP: 7.4
 Requires at least: 5.0
-Tested up to: 6.9
-Stable tag: 3.0.4
+Tested up to: 7.0
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Boost your SEO and get better rankings with our automated link building plugin. With this plugin you can link any keyword to any URL - internal or external. Set your links automatically and improve your UX & SEO.
+
+Automated internal linking made easy. Optimize your SEO performance, strengthen your link juice, and improve user experience automatically.
 
 == Description ==
-### What does Internal Links Manager do?
-You simply provide a keyword and an URL. Whenever the keyword appears on your site, it builds links automatically to the given URL.
 
-Here is an example: You have written a blogpost on "How to learn guitar". Now you want the URL "yourdomain.com/how-to-learn-guitar" to be automatically linked whenever the keyword "learn guitar" appears on your website. You simply navigate to "Add link" within the menu and provide the requested parameters (mainly keyword + URL).
+**Manual link building is a thing of the past!**
 
-### Why (internal) link building is so important
+With our **Internal Links Manager** plugin, you can take your SEO performance to the next level. The plugin automatically optimizes your internal linking, strengthening your link juice and improving both your on-page SEO and the user experience of your website.
 
-Improve your UX: Give your users the opportunity to discover relevant content with one click. Link important keywords with an related link. Your users stay longer on your website and get relevant information. As a side effect it improves your bounce rate, which is one of Googles ranking factors.
+Show Google your website structure – and guide your visitors specifically through your content at the same time. This way, you achieve better rankings and more visibility – without any technical effort.
 
-Boost your SEO: Internal links also important for search engines. Through internal links you can spread link equity and establish your site architecture.
+**The most important features at a glance:**
 
-### How to use
-1. Select menu item "Add link"
-2. Assign title (mainly for internal use)
-3. Optionally assign a link title (title attribute <a title=””> in HTML)
-4. Assign keywords, comma separated (keyword1, keyword2, etc.)
-5. Enter URL (Where should the keyword link to?)
-6. Optionally increase the number (How often should the link appear on a page?)
-7. Optionally set link nofollow (Should searchengine follow this link?)
-8. Choose link target (Open link in same tab or in new tab)
-9. Click save
+* **Automated internal linking** with precise fine-tuning (blacklist, keyword variants, HTML exclusions)
+* **Import & Export** for efficient bulk processing
+* **Selective linking** of individual words or phrases
+* **Statistics & Analytics** – analyze click numbers and optimize your link strategy
 
-The specified keywords on your website are now provided with the corresponding link and settings.
+**Start directly for free with the Basic version**
+Our free Basic version already provides you with the perfect tool for automated linking – you don't need any technical know-how.
+
+If you want even more control, the **Pro version** offers additional features such as WooCommerce & ACF support, Caching for maximum performance, and Prioritized email support.
+
+== Installation ==
+
+No technical know-how is required for the installation. Here’s how to install the plugin:
+
+1. **Download the plugin:** Start by downloading the Internal Links Manager plugin here: https://wordpress.org/plugins/seo-automated-link-building/
+2. **Open the WordPress dashboard:** Next, log in to your WordPress admin area. Go to the “Plugins” menu item in the left sidebar.
+3. **Upload the plugin:** Click “Add Plugin” at the top of the plugin page. Then select the “Upload Plugin” option. Upload the previously downloaded ZIP file of the Internal Links Manager and start the installation by clicking “Install Now.”
+4. **Activate the plugin:** After installation, click “Activate” to start using the plugin in your system.
+5. **Create internal links:** All set! You can now start creating internal links.
+
+A detailed guide can be found on our website.
 
 == Frequently Asked Questions ==
-= Why should I use automated link building? =
 
-Internal link building is important for your rankings within search engines like Google. With our plugin you can save a lot of time because you don't have to set links manually anymore. Realizing your internal linking strategy becomes a lot easier!
+= Is this plugin secure? =
+Security is our top priority. Our plugin is developed according to strict coding standards and is regularly checked through security audits. In addition, we continuously release updates to ensure that the plugin always remains at the highest level of security and is protected against potential threats.
 
-= Why are internal links useful? =
+= Is the plugin compatible with my current WordPress version? =
+Our plugin is always developed to work seamlessly with the latest WordPress versions. If compatibility issues should ever arise, our support team is always available to provide guidance and quick solutions.
 
-Internal linking boosts your SEO and User-Experience. By adding internal links to your website you increase the chances to get ranked higher on the SERP (search enginge result page). Through internal links you can also spread link equity and establish your site architecture.
-
-= Will this plugin overwrite links which I already set manually? =
-
-No. If you have already created a link manually, the plugin will not overwrite it.
-
-= Hey I found a bug! How can I report it? =
-
-We are grateful for every help. Simply send us an Email to contact@internal-links-manager.com.
+= How can I report errors or bugs? =
+We’re sorry that you’ve encountered a problem – your feedback is extremely valuable to us. Please contact our support team directly. To help us help you faster, please provide:
+* The steps that reproduce the error
+* The browser and WordPress version you’re using
+* Any error messages or screenshots
 
 == Screenshots ==
 
-1. add new link
-2. statistic
-3. settings
-4. all links
-
-== Installation ==
-1. Install Internal Links Manager by webraketen.io either via the WordPress.org plugin repository or by uploading the files to your server.
-2. Navigate to "Internal Links Manager" in your WordPress admin menu and add your first link.
+1. The main dashboard showing linking statistics.
+2. Configuration page for automated keyword linking.
 
 == Changelog ==
 
-" 3.0.4"
+= 3.1.0 =
+* Extended category settings, allowing to include / exclude certain categories
+* Minor performance improvements in settings area
+* Compatibility to Wordpress 7.0
+* Bugfix for link priority settings when using multiple links for one keyword
+* Escaping issues solved
+
+= 3.0.4 =
 * Fixed XSS vulnerability in statistics page
 * Fixed a minor bug on recreating the directory used for filesystem caching
+* Fixed Bug while saving ACF-Fields
 * Compatibility to Wordpress 6.9
 
 = 3.0.3 =

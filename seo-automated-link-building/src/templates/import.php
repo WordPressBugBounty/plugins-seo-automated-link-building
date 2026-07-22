@@ -19,29 +19,29 @@
 ?>
 
 <div class="wrap">
-    <h1 class="wp-heading-inline"><?php print $importHeadline ?></h1>
-    <form id="import-form" method="post" action="<?php print $adminPostUrl ?>" class="seo-automated-link-building-form dropzone">
+    <h1 class="wp-heading-inline"><?php echo esc_html( $importHeadline ); ?></h1>
+    <form id="import-form" method="post" action="<?php echo esc_url( $adminPostUrl ); ?>" class="seo-automated-link-building-form dropzone">
         <div>
             <input type="radio" name="mode" value="addMissing" id="addMissing" checked />
-            <label for="addMissing"><?php print $addMissingDescription ?></label>
+            <label for="addMissing"><?php echo esc_html( $addMissingDescription ); ?></label>
         </div>
         <div>
             <input type="radio" name="mode" value="update" id="update" />
-            <label for="update"><?php print $addMissingAndUpdateDescription ?></label>
+            <label for="update"><?php echo esc_html( $addMissingAndUpdateDescription ); ?></label>
         </div>
         <div>
             <input type="radio" name="mode" value="add" id="add" />
-            <label for="add"><?php print $addAlwaysDescription ?></label>
+            <label for="add"><?php echo esc_html( $addAlwaysDescription ); ?></label>
         </div>
         <input type="hidden" name="action" value="seo_automated_link_building_import_links" />
         <?php wp_nonce_field( 'seo_automated_link_building_import_links', 'nonce' ); ?>
     </form>
-    <h1 class="wp-heading-inline"><?php print $exportHeadline ?></h1>
+    <h1 class="wp-heading-inline"><?php echo esc_html( $exportHeadline ); ?></h1>
     <div>
         <input type="radio" name="ext" value="csv" id="csv" checked />
         <label for="csv">CSV</label>
 
-        <label for="separator"><?php print $separatorLabel ?></label>
+        <label for="separator"><?php echo esc_html( $separatorLabel ); ?></label>
         <select id="separator" name="separator">
             <option value=";">;</option>
             <option value=",">,</option>
@@ -52,6 +52,6 @@
         <label for="json">JSON</label>
     </div>
     <div>
-      <a class="export"><?php print $exportDescription ?></a>
+      <a class="export"><?php echo esc_html( $exportDescription ); ?></a>
     </div>
 </div>

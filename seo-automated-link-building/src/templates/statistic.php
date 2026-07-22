@@ -18,10 +18,10 @@
  */
 ?>
 <div class="wrap">
-    <h1 class="wp-heading-inline"><?php _e('Statistic', 'seo-automated-link-building') ?></h1>
+    <h1 class="wp-heading-inline"><?php esc_html_e( 'Statistic', 'seo-automated-link-building' ); ?></h1>
     <?php if($hasEntries): ?>
-        <a href="#" class="tab-link">30 <?php print _e('Days', 'seo-automated-link-building') ?></a>
-        <a href="#" class="tab-link"><?php print _e('Overall', 'seo-automated-link-building') ?></a>
+        <a href="#" class="tab-link">30 <?php esc_html_e( 'Days', 'seo-automated-link-building' ); ?></a>
+        <a href="#" class="tab-link"><?php esc_html_e( 'Overall', 'seo-automated-link-building' ); ?></a>
         <div class="tab">
             <div style="position: relative; height: 400px; width: 100%; margin-top: 20px">
                 <canvas id="daysChart"></canvas>

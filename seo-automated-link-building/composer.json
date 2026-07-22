@@ -16,5 +16,9 @@
     },
     "config": {
         "cache-dir": "./.cache"
+    },
+    "require-dev": {
+        "php-stubs/wordpress-stubs": "^7.0",
+        "php-stubs/wordpress-tests-stubs": "^7.0"
     }
 }

@@ -20,21 +20,21 @@
 
 <?php
 $default_tab = null;
-$tab = isset($_GET['tab']) ? $_GET['tab'] : $default_tab;
+$tab = isset($_GET['tab']) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : $default_tab; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $save_disabled = false;
 $action = '';
 ?>
 
 <div class="wrap ilm-settings">
-    <h1 class="wp-heading-inline"><?php print __('Settings') ?></h1>
+    <h1 class="wp-heading-inline"><?php esc_html_e( 'Settings', 'seo-automated-link-building' ); ?></h1>
 
-    <form id="save-settings" method="post" action="<?php print $adminPostUrl ?>">
+    <form id="save-settings" method="post" action="<?php echo esc_url( $adminPostUrl ); ?>">
 
         <nav class="nav-tab-wrapper">
-            <a href="?page=seo-automated-link-building-settings" class="nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>"><?php print __('General settings', 'seo-automated-link-building') ?></a>
-            <a href="?page=seo-automated-link-building-settings&tab=content" class="nav-tab <?php if($tab==='content'):?>nav-tab-active<?php endif; ?>"><?php print __('Content', 'seo-automated-link-building') ?></a>
-            <a href="?page=seo-automated-link-building-settings&tab=caching" class="nav-tab <?php if($tab==='caching'):?>nav-tab-active<?php endif; ?>"><?php print __('Caching', 'seo-automated-link-building') ?></a>
-            <a href="?page=seo-automated-link-building-settings&tab=plugins" class="nav-tab <?php if($tab==='plugins'):?>nav-tab-active<?php endif; ?>"><?php print __('3rd party plugins', 'seo-automated-link-building') ?></a>
+            <a href="?page=seo-automated-link-building-settings" class="nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>"><?php esc_html_e( 'General settings', 'seo-automated-link-building' ); ?></a>
+            <a href="?page=seo-automated-link-building-settings&tab=content" class="nav-tab <?php if($tab==='content'):?>nav-tab-active<?php endif; ?>"><?php esc_html_e( 'Content', 'seo-automated-link-building' ); ?></a>
+            <a href="?page=seo-automated-link-building-settings&tab=caching" class="nav-tab <?php if($tab==='caching'):?>nav-tab-active<?php endif; ?>"><?php esc_html_e( 'Caching', 'seo-automated-link-building' ); ?></a>
+            <a href="?page=seo-automated-link-building-settings&tab=plugins" class="nav-tab <?php if($tab==='plugins'):?>nav-tab-active<?php endif; ?>"><?php esc_html_e( '3rd party plugins', 'seo-automated-link-building' ); ?></a>
         </nav>
 
         <div class="tab-content">
@@ -59,12 +59,12 @@ $action = '';
 			endswitch; ?>
         </div>
 
-        <input type="hidden" name="action" value="<?php echo $action ?>" />
+        <input type="hidden" name="action" value="<?php echo esc_attr( $action ); ?>" />
 		<?php wp_nonce_field( $action, 'nonce' ); ?>
 		<?php if ($save_disabled === true) {
-			?> <input type="submit" disabled="disabled" class="button button-primary" value="<?php _e('Save') ?>"> <?php
+			?> <input type="submit" disabled="disabled" class="button button-primary" value="<?php esc_html_e( 'Save', 'seo-automated-link-building' ); ?>"> <?php
 		} else {
-			?> <input type="submit" class="button button-primary" value="<?php _e('Save') ?>"> <?php
+			?> <input type="submit" class="button button-primary" value="<?php esc_html_e( 'Save', 'seo-automated-link-building' ); ?>"> <?php
 		}
 		?>
     </form>

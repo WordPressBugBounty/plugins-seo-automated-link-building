@@ -23,12 +23,12 @@ namespace SeoAutomatedLinkBuilding;
 use wp_activerecord\ActiveRecord;
 
 /**
- * @property integer id
- * @property integer link_id
- * @property string title
- * @property string source_url
- * @property string destination_url
- * @property DateTime created_at
+ * @property integer $id
+ * @property integer $link_id
+ * @property string $title
+ * @property string $source_url
+ * @property string $destination_url
+ * @property \DateTime $created_at
  */
 class Statistic extends ActiveRecord
 {

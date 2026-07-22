@@ -60,7 +60,9 @@ class Settings
     public static function getRaw()
     {
         $domain = static::$domain;
-        return array_merge(static::$defaults, json_decode(get_option( "{$domain}_settings"), true, 512, JSON_UNESCAPED_UNICODE));
+		$defaults = static::$defaults;
+		$result = array_replace_recursive($defaults, json_decode(get_option( "{$domain}_settings"), true, 512, JSON_UNESCAPED_UNICODE));
+        return $result;
     }
 
 	/**
@@ -75,13 +77,13 @@ class Settings
 			'blacklist' => esc_html($settings['blacklist']),
 			'postTypes' => esc_html($settings['posttypes']),
 			'exclude' => esc_html($settings['exclude']),
-			'disableAdminTracking' => (bool) $settings['disableAdminTracking'] ?? false,
-			'disableStatistics' => (bool) $settings['disableStatistics'] ?? false,
+			'disableAdminTracking' => (bool) ($settings['disableAdminTracking'] ?? false),
+			'disableStatistics' => (bool) ($settings['disableStatistics'] ?? false),
 			'availablePostTypes' => array_keys(get_post_types(['public' => true])),
 		];
     }
 
-    private static function getLines($str)
+    protected static function getLines($str)
     {
         $lines = explode("\n", $str);
         $trimmedLines = array_map(function($line) {

@@ -4,7 +4,7 @@
 Plugin Name: Internal Links Manager
 Plugin URI:  https://internal-links-manager.com
 Description: Build internal links easily.
-Version:     3.0.4
+Version:     3.1.0
 Author:      webraketen
 Author URI:  https://www.webraketen.io
 License:     GPLv2 or later
@@ -54,6 +54,6 @@ if ( function_exists( 'ilm_fs' ) ) {
     if ( is_admin() ) {
         $result = load_textdomain( 'seo-automated-link-building', plugin_dir_path( __FILE__ ) . 'lang/seo-automated-link-building-de_DE.mo', 'de_DE' );
     }
-    $name = plugin_basename( __FILE__ );
-    new \SeoAutomatedLinkBuilding\Plugin($name);
+    define( 'ILM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+    new \SeoAutomatedLinkBuilding\Plugin(ILM_PLUGIN_BASENAME);
 }
