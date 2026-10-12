@@ -3,8 +3,8 @@ Contributors: webraketen, freemius
 Tags: seo, link building, search engine optimization, user experience, internal links,
 Requires PHP: 7.4
 Requires at least: 5.0
-Tested up to: 7.0
-Stable tag: 3.1.1
+Tested up to: 7.1
+Stable tag: 3.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,11 @@ We’re sorry that you’ve encountered a problem – your feedback is extremely
 2. Configuration page for automated keyword linking.
 
 == Changelog ==
+
+= 3.1.2 =
+* Fix: Skip non string values (e.g. Flexible Content, Repeater, Group, Gallery, Relationship) in ACF Extension. Otherwise they would be processed if an identically named text field exists
+* Updated Freemius SDK to the latest version
+* Compatibility to Wordpress 7.1
 
 = 3.1.1 =
 * Fix: Missing File included
