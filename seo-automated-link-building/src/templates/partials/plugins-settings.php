@@ -1,27 +1,29 @@
-<table class="form-table">
-    <tbody>
-    <tr>
-        <td colspan="2"><h3>WooCommerce</h3></td>
-    </tr>
-    <tr class="disabled" data-tooltip="<?php esc_attr_e( 'Pro-Feature', 'seo-automated-link-building' ); ?>">
-        <th><?php esc_html_e( 'Selection', 'seo-automated-link-building' ); ?></th>
-        <td>
+<div class="ilm-card">
+    <div class="ilm-card__head">
+        WooCommerce
+        <span class="ilm-pro" style="margin-left:auto"><?php esc_html_e( 'Pro', 'seo-automated-link-building' ); ?></span>
+    </div>
+    <div class="ilm-field disabled">
+        <span class="ilm-label"><?php esc_html_e( 'Selection', 'seo-automated-link-building' ); ?></span>
+        <div class="ilm-optionlist">
             <label>
-                <input type="checkbox" disabled="disabled"> <?php esc_html_e( 'Add links to products short description', 'seo-automated-link-building' ); ?>
+                <input type="checkbox" disabled="disabled"> <span><?php esc_html_e( 'Add links to products short description', 'seo-automated-link-building' ); ?></span>
             </label>
-            <br>
             <label>
-                <input type="checkbox" disabled="disabled"> <?php esc_html_e( 'Add links to category description', 'seo-automated-link-building' ); ?>
+                <input type="checkbox" disabled="disabled"> <span><?php esc_html_e( 'Add links to category description', 'seo-automated-link-building' ); ?></span>
             </label>
-            <br>
             <label>
-                <input type="checkbox" disabled="disabled"> <?php esc_html_e( 'Add links to product tag description', 'seo-automated-link-building' ); ?>
+                <input type="checkbox" disabled="disabled"> <span><?php esc_html_e( 'Add links to product tag description', 'seo-automated-link-building' ); ?></span>
             </label>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2"><h3>Advanced Custom Fields</h3></td>
-    </tr>
+        </div>
+    </div>
+</div>
+
+<div class="ilm-card">
+    <div class="ilm-card__head">
+        Advanced Custom Fields
+        <span class="ilm-pro" style="margin-left:auto"><?php esc_html_e( 'Pro', 'seo-automated-link-building' ); ?></span>
+    </div>
 	<?php
 
     $groups = [
@@ -60,19 +62,18 @@
 	foreach ( $groups as $group ):
 		if ( ! empty( $group['fields'] ) ) {
 			?>
-            <tr  class="disabled" data-tooltip="<?php esc_attr_e( 'Pro-Feature', 'seo-automated-link-building' ); ?>">
-                <th><?php echo esc_html( $group['name'] ); ?></th>
-                <td>
+            <div class="ilm-field disabled">
+                <span class="ilm-label"><?php echo esc_html( $group['name'] ); ?></span>
+                <div class="ilm-optionlist">
 					<?php foreach ( $group['fields'] as $field ): ?>
                         <label>
-                            <input type="checkbox" disabled="disabled" /> <?php echo esc_html( $field['name'] ); ?>
-                        </label><br>
+                            <input type="checkbox" disabled="disabled" /> <span><?php echo esc_html( $field['name'] ); ?></span>
+                        </label>
 					<?php endforeach; ?>
-                </td>
-            </tr>
+                </div>
+            </div>
 			<?php
 		}
 	endforeach;
 	?>
-    </tbody>
-</table>
+</div>

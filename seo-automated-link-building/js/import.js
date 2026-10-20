@@ -1,5 +1,8 @@
 Dropzone.options.importForm = {
-  dictDefaultMessage: seoAutomatedLinkBuildingImport.importHint,
+  // Nur der Ablagebereich öffnet den Dateidialog, nicht das ganze Formular.
+  clickable: '#ilm-drop-target',
+  // Der sichtbare Hinweistext steht im Template (#ilm-drop-target).
+  dictDefaultMessage: '',
   error: function(file, response) {
     //console.error(response);
     if(response.message.length > 0) {
@@ -17,6 +20,12 @@ Dropzone.options.importForm = {
 };
 
 jQuery(function($) {
+  // Das Trennzeichen gilt nur für CSV, bei JSON ausblenden.
+  var $separatorField = $('#separator-field');
+  $('input[name=ext]').on('change', function() {
+    $separatorField.toggle($('input[name=ext]:checked').val() === 'csv');
+  }).trigger('change');
+
   $('.export').on('click', function() {
     const ext = $('input[name=ext]:checked').val();
     const separator = $('select[name=separator]').val();

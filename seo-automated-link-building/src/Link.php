@@ -37,10 +37,20 @@ use wp_activerecord\ActiveRecord;
  * @property string $target
  * @property integer $priority
  * @property integer|null $page_id
+ * @property string|null $origin  Herkunft des Links, z. B. "ai" für vom KI-Modus angelegte Links
+ * @property string|null $category_mode  Kategorie-Bedingung (Pro): all, same oder selected
+ * @property string|null $category_ids  JSON-Liste der Kategorie-IDs für category_mode "selected"
  */
 class Link extends ActiveRecord
 {
     protected static $table_name = 'seo_automated_link_building';
+
+	const ORIGIN_AI = 'ai';
+
+	// Kategorie-Bedingung: in welchen Beiträgen der Link gesetzt werden darf
+	const CATEGORY_MODE_ALL = 'all';
+	const CATEGORY_MODE_SAME = 'same';
+	const CATEGORY_MODE_SELECTED = 'selected';
 
     protected static $casts = [
         'nofollow' => 'boolean',
@@ -65,6 +75,30 @@ class Link extends ActiveRecord
         }
         return $keywords;
     }
+
+	/**
+	 * @return string einer der CATEGORY_MODE_*-Werte, unbekannte Werte gelten als "all"
+	 */
+	public function getCategoryMode() {
+		$mode = (string) $this->category_mode;
+		if ( in_array( $mode, [ self::CATEGORY_MODE_SAME, self::CATEGORY_MODE_SELECTED ], true ) ) {
+			return $mode;
+		}
+
+		return self::CATEGORY_MODE_ALL;
+	}
+
+	/**
+	 * @return int[]
+	 */
+	public function getCategoryIds() {
+		$ids = json_decode( (string) $this->category_ids, true );
+		if ( ! is_array( $ids ) ) {
+			return [];
+		}
+
+		return array_values( array_unique( array_filter( array_map( 'intval', $ids ) ) ) );
+	}
 
     public function getReplacePattern()
     {

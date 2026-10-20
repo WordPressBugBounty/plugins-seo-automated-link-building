@@ -485,9 +485,6 @@ msgstr "<strong>Achtung:</strong> wird eine Gruppe (z.B. Autor) gewählt, haben 
 msgid "Role / User"
 msgstr "Rolle / Benutzer"
 
-msgid "Custom field"
-msgstr "Beispiel-Feld"
-
 msgid "ACF Sample Group"
 msgstr "ACF Beispiel-Gruppe"
 
@@ -505,3 +502,588 @@ msgstr "Hilf uns, den Internal Links Manager zu verbessern. Teile uns deine Mein
 
 msgid "Get involved now"
 msgstr "Jetzt mitmachen"
+
+msgid "General"
+msgstr "Allgemein"
+
+msgid "Link placement"
+msgstr "Link-Platzierung"
+
+msgid "Tracking"
+msgstr "Tracking"
+
+msgid "More content sources"
+msgstr "Weitere Inhaltsquellen"
+
+msgid "Filter links list"
+msgstr "Linkliste filtern"
+
+msgid "(no title)"
+msgstr "(kein Titel)"
+
+msgid "Pro"
+msgstr "Pro"
+
+msgid "Clicks (last 28 days)"
+msgstr "Klicks (letzte 28 Tage)"
+
+msgid "Best day"
+msgstr "Bester Tag"
+
+msgid "Words on your pages that get turned into this link."
+msgstr "Begriffe auf deinen Seiten, die automatisch mit diesem Link versehen werden."
+
+msgid "Cache processed content for faster page loads on large sites."
+msgstr "Speichert verarbeitete Inhalte zwischen, damit große Websites schneller laden."
+
+msgid "Caching"
+msgstr "Caching"
+
+msgid "Content"
+msgstr "Inhalt"
+
+msgid "Separator"
+msgstr "Trennzeichen"
+
+msgid "How should existing entries be handled?"
+msgstr "Wie sollen vorhandene Einträge behandelt werden?"
+
+msgid "Drag a file here"
+msgstr "Datei hierher ziehen"
+
+msgid "or click to select a file"
+msgstr "oder klicken, um eine Datei auszuwählen"
+
+msgid "CSV or JSON"
+msgstr "CSV oder JSON"
+
+msgid "Only relevant for CSV."
+msgstr "Nur für CSV relevant."
+# KI-Modus (ILM-66)
+
+msgid "AI mode"
+msgstr "KI-Modus"
+
+msgid "Unknown AI provider."
+msgstr "Unbekannter KI-Anbieter."
+
+msgid "Please enter the API key for the selected provider."
+msgstr "Bitte gib den API-Key für den gewählten Anbieter ein."
+
+msgid "Please enter your API key."
+msgstr "Bitte gib deinen API-Key ein."
+
+msgid "The API key is valid, but no suitable models are available for it."
+msgstr "Der API-Key ist gültig, aber für ihn sind keine passenden Modelle verfügbar."
+
+msgid "Unknown model."
+msgstr "Unbekanntes Modell."
+
+msgid "Please describe in one or two sentences what you want to achieve with your website."
+msgstr "Beschreibe bitte in ein, zwei Sätzen, was du mit deiner Website erreichen willst."
+
+msgid "No published pages, posts or products were found."
+msgstr "Es wurden keine veröffentlichten Seiten, Beiträge oder Produkte gefunden."
+
+msgid "Invalid batch."
+msgstr "Ungültiger Teilschritt."
+
+msgid "Please select at least one target page."
+msgstr "Bitte wähle mindestens eine Ziel-Seite aus."
+
+msgid "Added by you"
+msgstr "Von dir ergänzt"
+
+msgid "Please select at least one suggestion."
+msgstr "Bitte wähle mindestens einen Vorschlag aus."
+
+msgid "AI: %s"
+msgstr "KI: %s"
+
+msgid "Your session has expired. Please reload the page."
+msgstr "Deine Sitzung ist abgelaufen. Bitte lade die Seite neu."
+
+msgid "Sorry, you are not allowed to do that."
+msgstr "Dazu fehlt dir leider die Berechtigung."
+
+msgid "Please connect an AI provider first."
+msgstr "Bitte verbinde zuerst einen KI-Anbieter."
+
+msgid "The AI run has expired. Please start again."
+msgstr "Der KI-Lauf ist abgelaufen. Bitte starte neu."
+
+msgid "Connected"
+msgstr "Verbunden"
+
+msgid "Not connected"
+msgstr "Nicht verbunden"
+
+msgid "Testing connection…"
+msgstr "Verbindung wird getestet…"
+
+msgid "Stored key: %s – leave empty to keep it."
+msgstr "Gespeicherter Key: %s – leer lassen, um ihn zu behalten."
+
+msgid "How to get your %s API key"
+msgstr "So bekommst du deinen %s-API-Key"
+
+msgid "Remove the stored API key?"
+msgstr "Gespeicherten API-Key entfernen?"
+
+msgid "Scanning your website…"
+msgstr "Deine Website wird gescannt…"
+
+msgid "%1$d pages found. The AI analysis needs %2$d request(s) with about %3$s input tokens. The costs depend on the model of your provider."
+msgstr "%1$d Seiten gefunden. Die KI-Analyse braucht %2$d Anfrage(n) mit etwa %3$s Eingabe-Tokens. Die Kosten hängen vom Modell deines Anbieters ab."
+
+msgid "Your website has more pages than can be analysed at once – only the %d most recently modified pages are included."
+msgstr "Deine Website hat mehr Seiten, als auf einmal analysiert werden können – berücksichtigt werden die %d zuletzt geänderten Seiten."
+
+msgid "The AI is looking for your most valuable pages… (request %1$d of %2$d)"
+msgstr "Die KI sucht deine wertvollsten Seiten… (Anfrage %1$d von %2$d)"
+
+msgid "The AI is generating keywords… (request %1$d of %2$d)"
+msgstr "Die KI erzeugt Keywords… (Anfrage %1$d von %2$d)"
+
+msgid "%1$d target pages selected – about %2$s input tokens."
+msgstr "%1$d Ziel-Seiten ausgewählt – etwa %2$s Eingabe-Tokens."
+
+msgid "The AI could not find suitable target pages. Please describe your goal more precisely or add pages manually."
+msgstr "Die KI hat keine passenden Ziel-Seiten gefunden. Beschreibe dein Ziel bitte genauer oder ergänze Seiten von Hand."
+
+msgid "The AI could not generate any new keywords for the selected pages. Possibly all suitable terms are already in use."
+msgstr "Die KI konnte für die gewählten Seiten keine neuen Keywords erzeugen. Möglicherweise sind alle passenden Begriffe bereits vergeben."
+
+msgid "Money page"
+msgstr "Money-Page"
+
+msgid "Search pages…"
+msgstr "Seiten durchsuchen…"
+
+msgid "No pages found."
+msgstr "Keine Seiten gefunden."
+
+msgid "Keyword"
+msgstr "Keyword"
+
+msgid "Remove keyword"
+msgstr "Keyword entfernen"
+
+msgid "New keyword"
+msgstr "Neues Keyword"
+
+msgid "Creating links…"
+msgstr "Links werden angelegt…"
+
+msgid "%d links have been created and are live now. You can find them under \"All Links\" (marked \"AI\") and adjust, deactivate or delete them there at any time."
+msgstr "%d Links wurden angelegt und sind jetzt live. Du findest sie unter „Alle Links“ (Herkunft „KI“) und kannst sie dort jederzeit anpassen, deaktivieren oder löschen."
+
+msgid "%d orphaned links have been deactivated."
+msgstr "%d verwaiste Links wurden deaktiviert."
+
+msgid "%d suggestions were not published because of the trial limit."
+msgstr "%d Vorschläge wurden wegen des Limits der Testversion nicht veröffentlicht."
+
+msgid "Trial version: you can publish up to %1$d AI links (%2$d remaining). Upgrade to publish all suggestions."
+msgstr "Testversion: Du kannst bis zu %1$d KI-Links veröffentlichen (noch %2$d). Upgrade, um alle Vorschläge zu veröffentlichen."
+
+msgid "Upgrade to publish"
+msgstr "Upgrade, um zu veröffentlichen"
+
+msgid "In the trial version, the AI mode can be used for one run. Upgrade to Pro to run it again whenever your content changes."
+msgstr "In der Testversion kann der KI-Modus für einen Lauf genutzt werden. Mit Pro kannst du ihn jederzeit erneut starten, wenn sich deine Inhalte ändern."
+
+msgid "You still have unpublished suggestions from %s."
+msgstr "Du hast noch nicht veröffentlichte Vorschläge vom %s."
+
+msgid "Orphaned links"
+msgstr "Verwaiste Links"
+
+msgid "These active links point to pages that no longer exist. Their keywords are free again for new suggestions. Deactivate them?"
+msgstr "Diese aktiven Links zeigen auf Seiten, die es nicht mehr gibt. Ihre Keywords sind wieder frei für neue Vorschläge. Deaktivieren?"
+
+msgid "Target page deleted"
+msgstr "Ziel-Seite gelöscht"
+
+msgid "Target page no longer published"
+msgstr "Ziel-Seite nicht mehr veröffentlicht"
+
+msgid "Target URL not found (404)"
+msgstr "Ziel-URL nicht gefunden (404)"
+
+msgid "The request failed. Please try again."
+msgstr "Die Anfrage ist fehlgeschlagen. Bitte versuche es erneut."
+
+msgid "Create %d selected & publish"
+msgstr "%d ausgewählte anlegen & veröffentlichen"
+
+msgid "The AI provider returned an unreadable response."
+msgstr "Der KI-Anbieter hat eine unlesbare Antwort geliefert."
+
+msgid "The API key was rejected."
+msgstr "Der API-Key wurde abgelehnt."
+
+msgid "Rate limit or quota of your API key exceeded."
+msgstr "Anfragelimit oder Kontingent deines API-Keys überschritten."
+
+msgid "The AI provider returned an error (HTTP %d)."
+msgstr "Der KI-Anbieter hat einen Fehler gemeldet (HTTP %d)."
+
+msgid "The AI response was not valid JSON."
+msgstr "Die KI-Antwort war kein gültiges JSON."
+
+msgid "No API key configured."
+msgstr "Kein API-Key hinterlegt."
+
+msgid "The AI model declined the request."
+msgstr "Das KI-Modell hat die Anfrage abgelehnt."
+
+msgid "The AI response was cut off because it was too long."
+msgstr "Die KI-Antwort wurde abgeschnitten, weil sie zu lang war."
+
+msgid "The AI provider blocked the response (%s)."
+msgstr "Der KI-Anbieter hat die Antwort blockiert (%s)."
+
+msgid "Answer one question – the AI does the rest."
+msgstr "Beantworte eine Frage – den Rest macht die KI."
+
+msgid "Steps"
+msgstr "Schritte"
+
+msgid "Connection"
+msgstr "Verbindung"
+
+msgid "Goal"
+msgstr "Ziel"
+
+msgid "Confirm targets"
+msgstr "Ziele bestätigen"
+
+msgid "Review & publish"
+msgstr "Prüfen & veröffentlichen"
+
+msgid "AI connection (bring your own key)"
+msgstr "KI-Verbindung (Bring Your Own Key)"
+
+msgid "Provider"
+msgstr "Anbieter"
+
+msgid "API key"
+msgstr "API-Key"
+
+msgid "Test connection"
+msgstr "Verbindung testen"
+
+msgid "Your key, your costs. It is stored encrypted and never output in the browser."
+msgstr "Dein Key, deine Kosten. Er wird verschlüsselt gespeichert und nie im Browser ausgegeben."
+
+msgid "Model"
+msgstr "Modell"
+
+msgid "Preselected is a recommended model. Smaller models are cheaper, larger ones usually deliver better suggestions."
+msgstr "Vorausgewählt ist ein empfohlenes Modell. Kleinere Modelle sind günstiger, größere liefern meist bessere Vorschläge."
+
+msgid "Remove API key"
+msgstr "API-Key entfernen"
+
+msgid "An administrator has to connect an AI provider first."
+msgstr "Ein Administrator muss zuerst einen KI-Anbieter verbinden."
+
+msgid "Privacy: for the analysis, titles, URLs, meta descriptions and short excerpts of your public pages are sent to the selected AI provider. No personal data from your database is transmitted."
+msgstr "Datenschutz: Für die Analyse werden Titel, URLs, Meta-Descriptions und kurze Auszüge deiner öffentlichen Seiten an den gewählten KI-Anbieter übertragen. Personenbezogene Daten aus deiner Datenbank werden nicht übermittelt."
+
+msgid "Next"
+msgstr "Weiter"
+
+msgid "What do you want to achieve with your website?"
+msgstr "Was willst du mit deiner Website erreichen?"
+
+msgid "e.g.: We want more enquiries for our SEO consulting from medium-sized B2B companies."
+msgstr "z. B.: Wir wollen mehr Anfragen für unsere SEO-Beratung von B2B-Mittelständlern."
+
+msgid "One or two sentences in your own words are enough. From this, the AI recognises which of your pages really matter – you do not have to pick any pages."
+msgstr "Ein, zwei Sätze in deinen eigenen Worten reichen. Daraus erkennt die KI, welche deiner Seiten wirklich wichtig sind – du musst keine Seiten heraussuchen."
+
+msgid "Who is your target audience?"
+msgstr "Wer ist deine Zielgruppe?"
+
+msgid "optional"
+msgstr "optional"
+
+msgid "e.g. marketing managers in medium-sized companies"
+msgstr "z. B. Marketing-Verantwortliche im Mittelstand"
+
+msgid "Helps the AI to judge which terms your readers actually use."
+msgstr "Hilft der KI einzuschätzen, welche Begriffe deine Leser tatsächlich verwenden."
+
+msgid "Back"
+msgstr "Zurück"
+
+msgid "Scan website"
+msgstr "Website scannen"
+
+msgid "Suggest targets"
+msgstr "Ziele vorschlagen"
+
+msgid "analysed pages"
+msgstr "analysierte Seiten"
+
+msgid "suggested targets"
+msgstr "vorgeschlagene Ziele"
+
+msgid "of which money pages"
+msgstr "davon Money-Pages"
+
+msgid "Quick check: <strong>these pages</strong> would receive internal links. You know your business – correcting it here is easier (and cheaper) than sorting out finished keyword rules later."
+msgstr "Kurz gegenprüfen: <strong>Auf diese Seiten</strong> würden wir intern verlinken. Du kennst dein Geschäft – hier zu korrigieren ist leichter (und günstiger), als später fertige Keyword-Regeln auseinanderzusortieren."
+
+msgid "Target page"
+msgstr "Ziel-Seite"
+
+msgid "Why the AI suggests it"
+msgstr "Warum die KI sie vorschlägt"
+
+msgid "Use as target"
+msgstr "Als Ziel nutzen"
+
+msgid "Add page as target"
+msgstr "Seite als Ziel hinzufügen"
+
+msgid "Search pages"
+msgstr "Seiten durchsuchen"
+
+msgid "Generate keywords"
+msgstr "Keywords erzeugen"
+
+msgid "suggestions"
+msgstr "Vorschläge"
+
+msgid "keywords incl. synonyms"
+msgstr "Keywords inkl. Synonyme"
+
+msgid "links to money pages"
+msgstr "Links auf Money-Pages"
+
+msgid "This is your review step: everything you accept is <strong>created as an active link and goes live immediately</strong>. You can adjust, deactivate or delete it under \"All Links\" at any time."
+msgstr "Das ist dein Prüfschritt: Was du übernimmst, wird direkt als <strong>aktiver Link angelegt und ist sofort live</strong>. Jederzeit unter „Alle Links“ anpassen, deaktivieren oder löschen."
+
+msgid "Upgrade"
+msgstr "Upgrade"
+
+msgid "Target"
+msgstr "Ziel"
+
+msgid "Keywords (incl. synonyms)"
+msgstr "Keywords (inkl. Synonyme)"
+
+msgid "Why"
+msgstr "Warum"
+
+msgid "Accept"
+msgstr "Übernehmen"
+
+msgid "Back to targets"
+msgstr "Zurück zu den Zielen"
+
+msgid "Discard suggestions"
+msgstr "Vorschläge verwerfen"
+
+msgid "Start new run"
+msgstr "Neuen Lauf starten"
+
+msgid "Created by AI mode"
+msgstr "Vom KI-Modus angelegt"
+
+msgid "AI"
+msgstr "KI"
+
+# KI-Modus (ILM-66)
+
+msgid "The AI model is currently overloaded (HTTP %d)."
+msgstr "Das KI-Modell ist gerade überlastet (HTTP %d)."
+
+msgid "Tip: try again in a moment or choose a different model. Parts that have already been analysed are kept – the next attempt continues where it stopped."
+msgstr "Tipp: Versuche es gleich noch einmal oder wähle ein anderes Modell. Bereits analysierte Teile bleiben erhalten – der nächste Versuch macht dort weiter, wo er aufgehört hat."
+
+msgid "Continue analysis"
+msgstr "Analyse fortsetzen"
+
+msgid "AI model"
+msgstr "KI-Modell"
+
+msgid "Model changed to %s."
+msgstr "Modell auf %s umgestellt."
+
+msgid "If a model is overloaded or too slow, you can switch it here at any time."
+msgstr "Ist ein Modell überlastet oder zu langsam, kannst du es hier jederzeit wechseln."
+
+# KI-Modus (ILM-66)
+
+msgid "Your API account has no credit left. Please top up your balance with the AI provider or use a different provider."
+msgstr "Dein API-Konto hat kein Guthaben mehr. Bitte lade beim KI-Anbieter Guthaben auf oder nutze einen anderen Anbieter."
+
+# KI-Modus (ILM-66)
+
+msgid "This Anthropic API key does not belong to a workspace. Please create a new key within a workspace in the Anthropic Console (Settings → Workspaces → select a workspace, e.g. \"Default\" → API keys) and enter it here."
+msgstr "Dieser Anthropic-API-Key gehört zu keinem Workspace. Bitte lege in der Anthropic Console einen neuen Key innerhalb eines Workspaces an (Settings → Workspaces → Workspace wählen, z. B. „Default“ → API keys) und trage ihn hier ein."
+
+# KI-Modus (ILM-66)
+
+msgid "<strong>Money pages</strong> are pages that directly generate revenue or enquiries – e.g. product, service, pricing or contact pages. They receive internal links with priority and more keyword variants. Tick or untick the box if the AI has misjudged a page."
+msgstr "<strong>Money-Pages</strong> sind Seiten, die direkt Umsatz oder Anfragen bringen – z. B. Produkt-, Leistungs-, Preis- oder Kontaktseiten. Sie bekommen bevorzugt interne Links und mehr Keyword-Varianten. Setze oder entferne den Haken, wenn die KI eine Seite falsch eingeschätzt hat."
+
+msgid "Pages that directly generate revenue or enquiries. They are linked with priority."
+msgstr "Seiten, die direkt Umsatz oder Anfragen bringen. Sie werden bevorzugt verlinkt."
+
+# KI-Modus (ILM-66)
+
+msgid "Please select at least one link."
+msgstr "Bitte wähle mindestens einen Link aus."
+
+msgid "Deactivate selected now"
+msgstr "Ausgewählte jetzt deaktivieren"
+
+msgid "Alternatively, you can deactivate them together with publishing in the last step."
+msgstr "Alternativ kannst du sie im letzten Schritt zusammen mit dem Veröffentlichen deaktivieren."
+
+# KI-Modus (ILM-66)
+
+msgid "already a target"
+msgstr "bereits Ziel"
+
+msgid "Existing link: %s"
+msgstr "Vorhandener Link: %s"
+
+msgid "This page is already the target of a link and is therefore deselected. If you select it, an additional link is created."
+msgstr "Auf diese Seite zeigt bereits ein Link, daher ist sie abgewählt. Wählst du sie aus, wird ein zusätzlicher Link angelegt."
+
+# KI-Modus (ILM-66)
+
+msgid "Your AI run from %s has been restored. Results that have already been generated are reused – no additional costs."
+msgstr "Dein KI-Lauf vom %s wurde wiederhergestellt. Bereits erzeugte Ergebnisse werden weiterverwendet – es entstehen keine erneuten Kosten."
+
+msgid "You have unsaved changes. Do you really want to leave the page?"
+msgstr "Du hast ungespeicherte Änderungen. Willst du die Seite wirklich verlassen?"
+
+# KI-Modus (ILM-66)
+
+msgid "Remove the stored %s API key? Keys of other providers are kept."
+msgstr "Gespeicherten API-Key für %s entfernen? Die Keys der anderen Anbieter bleiben erhalten."
+
+msgid "API key stored"
+msgstr "API-Key gespeichert"
+
+# KI-Modus (ILM-66)
+
+msgid "%d suggestions were not published because of the publishing limit."
+msgstr "%d Vorschläge wurden wegen des Veröffentlichungslimits nicht veröffentlicht."
+
+msgid "Without a paid Pro license, you can publish up to %1$d AI links (%2$d remaining). Upgrade to publish all suggestions."
+msgstr "Ohne bezahlte Pro-Lizenz kannst du bis zu %1$d KI-Links veröffentlichen (noch %2$d). Upgrade, um alle Vorschläge zu veröffentlichen."
+
+msgid "Without a paid Pro license, the AI mode can be used for one run. Upgrade to Pro to run it again whenever your content changes."
+msgstr "Ohne bezahlte Pro-Lizenz kann der KI-Modus für einen Lauf genutzt werden. Mit Pro kannst du ihn jederzeit erneut starten, wenn sich deine Inhalte ändern."
+
+msgid "Internal Links Manager: Pro features are paused"
+msgstr "Internal Links Manager: Pro-Funktionen pausiert"
+
+msgid "There is no active Pro license or running trial for this website. Caching, links in WooCommerce and ACF content, the custom CSS class, user permissions and the AI mode are therefore paused. Links in your regular content keep working."
+msgstr "Für diese Website gibt es keine aktive Pro-Lizenz und keine laufende Testphase. Caching, Links in WooCommerce- und ACF-Inhalten, die eigene CSS-Klasse, die Benutzerrechte und der KI-Modus sind deshalb pausiert. Links in deinen normalen Inhalten funktionieren weiterhin."
+
+msgid "<strong>Your data has not been lost:</strong> all links, settings, permissions and AI suggestions remain stored and are available again immediately after you renew your license."
+msgstr "<strong>Deine Daten sind nicht verloren:</strong> Alle Links, Einstellungen, Berechtigungen und KI-Vorschläge bleiben gespeichert und stehen nach dem Verlängern deiner Lizenz sofort wieder zur Verfügung."
+
+msgid "Renew or buy license"
+msgstr "Lizenz verlängern oder kaufen"
+
+# KI-Modus (ILM-66)
+
+msgid "This run has already been published. Please start a new run."
+msgstr "Dieser Lauf wurde bereits veröffentlicht. Bitte starte einen neuen Lauf."
+
+msgid "Last run from %1$s: %2$d suggestions, %3$d of them published."
+msgstr "Letzter Lauf vom %1$s: %2$d Vorschläge, davon %3$d veröffentlicht."
+
+msgid "Scanning again starts a new run and replaces these results."
+msgstr "Ein erneuter Scan startet einen neuen Lauf und ersetzt diese Ergebnisse."
+
+msgid "Show results"
+msgstr "Ergebnisse anzeigen"
+
+msgid "Published"
+msgstr "Veröffentlicht"
+
+# KI-Modus (ILM-66)
+
+msgid "This can take a moment. Please keep this page open."
+msgstr "Das kann einen Moment dauern. Bitte lass diese Seite geöffnet."
+
+# KI-Modus (ILM-66)
+
+msgid "The AI mode is available in Internal Links Manager Pro."
+msgstr "Der KI-Modus ist in Internal Links Manager Pro enthalten."
+
+msgid "Start free trial"
+msgstr "Kostenlos testen"
+
+msgid "Upgrade to Pro"
+msgstr "Auf Pro upgraden"
+
+msgid "What the AI mode does for you"
+msgstr "Das erledigt der KI-Modus für dich"
+
+msgid "Describe your goal in one or two sentences – the AI finds the pages that really matter, such as product, service or contact pages."
+msgstr "Beschreibe dein Ziel in ein, zwei Sätzen – die KI findet die Seiten, auf die es wirklich ankommt, z. B. Produkt-, Leistungs- oder Kontaktseiten."
+
+msgid "It suggests keywords and synonyms for each of these pages in the words your readers actually use."
+msgstr "Sie schlägt für jede dieser Seiten Keywords und Synonyme vor – in den Worten, die deine Leser tatsächlich verwenden."
+
+msgid "You check every suggestion. Only what you accept goes live as an internal link."
+msgstr "Du prüfst jeden Vorschlag. Nur was du annimmst, geht als interner Link live."
+
+msgid "It finds links that point to deleted or unpublished pages."
+msgstr "Sie findet Links, die auf gelöschte oder nicht mehr veröffentlichte Seiten zeigen."
+
+msgid "Bring your own key: works with Google Gemini, OpenAI or Anthropic Claude. You only pay your provider for what you use."
+msgstr "Mit deinem eigenen API-Key: funktioniert mit Google Gemini, OpenAI oder Anthropic Claude. Du zahlst deinem Anbieter nur, was du nutzt."
+
+msgid "Preview"
+msgstr "Vorschau"
+
+msgid "Category condition"
+msgstr "Kategorie-Bedingung"
+
+msgid "Where should this link be set?"
+msgstr "Wo soll der Link gesetzt werden?"
+
+msgid "Everywhere"
+msgstr "Überall"
+
+msgid "Only in posts sharing a category with the link target"
+msgstr "Nur in Beiträgen, die eine Kategorie mit dem Linkziel gemeinsam haben"
+
+msgid "Only in posts of selected categories"
+msgstr "Nur in Beiträgen ausgewählter Kategorien"
+
+msgid "With a category condition, the link is only set in posts. Pages and archive descriptions have no categories and are skipped."
+msgstr "Mit einer Kategorie-Bedingung wird der Link nur in Beiträgen gesetzt. Seiten und Archiv-Beschreibungen haben keine Kategorien und werden übersprungen."
+
+msgid "The link target must be a post with categories. Pages, other content types and external URLs have no categories, so the link would not be set anywhere."
+msgstr "Das Linkziel muss ein Beitrag mit Kategorien sein. Seiten, andere Inhaltstypen und externe URLs haben keine Kategorien, der Link würde dann nirgends gesetzt."
+
+msgid "Categories"
+msgstr "Kategorien"
+
+msgid "The post needs at least one of the selected categories. Subcategories are not included automatically."
+msgstr "Der Beitrag muss mindestens eine der ausgewählten Kategorien haben. Unterkategorien sind nicht automatisch eingeschlossen."
+
+msgid "Please select at least one category"
+msgstr "Bitte wähle mindestens eine Kategorie aus"
+
+#. translators: %s: internal link title
+msgid "The target of the link \"%s\" has no categories. With the condition \"same category\" it is not set anywhere."
+msgstr "Das Ziel des Links „%s“ hat keine Kategorien. Mit der Bedingung „gleiche Kategorie“ wird er nirgends gesetzt."
+
+#. translators: %s: internal link title
+msgid "No categories are selected for the link \"%s\", so it is not set anywhere."
+msgstr "Für den Link „%s“ sind keine Kategorien ausgewählt, daher wird er nirgends gesetzt."

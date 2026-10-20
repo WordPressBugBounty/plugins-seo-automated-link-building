@@ -85,7 +85,7 @@ class StatisticList extends \WP_List_Table
 
     protected function column_default($item, $column_name)
     {
-        return '<input type="checkbox" name="post[]" value="all" checked>' . $item->{$column_name};
+        return esc_html( $item->{$column_name} );
     }
 
 	protected function column_title($item)

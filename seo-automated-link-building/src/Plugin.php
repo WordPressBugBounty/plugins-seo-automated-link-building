@@ -27,12 +27,44 @@ class Plugin
     protected $name;
 
 	public static $domain = 'seo-automated-link-building';
-    private $dbVersion = '1.4.1';
+    private $dbVersion = '1.6.0';
 
     protected $editData = null;
     protected $statisticData = null;
 
 	protected $settings;
+
+	/**
+	 * Kategorien der Linkziele je Link-ID (Cache für den aktuellen Request)
+	 *
+	 * @var array<int, int[]>
+	 */
+	protected $targetCategories = [];
+
+	/**
+	 * Werte von $type in changeContent(), deren Inhalt zum aktuellen Beitrag ($post)
+	 * gehört. Nur hier greifen Links mit Kategorie-Bedingung, in allen anderen
+	 * Inhalten (Archiv-Beschreibungen, künftige Inhaltsquellen) nicht.
+	 *
+	 * @var string[]
+	 */
+	protected static $postContentTypes = [
+		'post',
+		'wordpress-excerpt',
+		'custom-field',
+		'acf-value',
+		'woocommerce-short-description',
+	];
+
+	/**
+	 * Kategorie-Bedingungen pro Link sind ein Pro-Feature. Gespeicherte
+	 * Bedingungen werden aber immer ausgewertet, auch nach Ablauf der Lizenz.
+	 *
+	 * @return bool
+	 */
+	public function canEditCategoryConditions() {
+		return false;
+	}
 
 	/**
 	 * returns the required capability to make this plugin usable
@@ -202,6 +234,18 @@ class Plugin
 
     public function enqueueAdminScripts($hook_suffix)
     {
+        // Shared admin design system (scoped under .ilm-admin), loaded on all ILM screens.
+        if ( strpos( (string) $hook_suffix, 'seo-automated-link-building' ) !== false ) {
+            wp_enqueue_style( 'dashicons' );
+            $adminCssPath = dirname( __DIR__ ) . '/css/admin.css';
+            wp_enqueue_style(
+                'seo-automated-link-building-admin',
+                plugins_url( '/css/admin.css', $this->name ),
+                array(),
+                file_exists( $adminCssPath ) && filemtime( $adminCssPath ) ? (string) filemtime( $adminCssPath ) : false
+            );
+        }
+
 	    wp_enqueue_script('seo-automated-link-building-common', plugins_url('/js/seo-automated-link-building.admin.js', $this->name ),
 		    ['jquery', 'wp-i18n'],
 		    '1.0.0',
@@ -219,7 +263,7 @@ class Plugin
             wp_enqueue_style( 'jquery.auto-complete', plugins_url( '/css/external/jquery.auto-complete.min.css', $this->name ), array() );
             // page specific
             wp_enqueue_style( 'seo-automated-link-building-edit', plugins_url( '/css/edit.css', $this->name ), array() );
-            wp_enqueue_script( 'seo-automated-link-building-edit', plugins_url( '/js/edit.js', $this->name ), array('taggle', 'jquery.auto-complete') );
+            wp_enqueue_script( 'seo-automated-link-building-edit', plugins_url( '/js/edit.js', $this->name ), array('taggle', 'jquery.auto-complete', 'seo-automated-link-building-common') );
             $editData = $this->getEditData();
             $link = $editData->link;
             $page = $editData->page;
@@ -232,6 +276,8 @@ class Plugin
                 'replaceHint' => __('Words to replace...', 'seo-automated-link-building'),
                 'keywords' => $link ? json_decode($link->keywords) : [],
                 'page' => $page,
+                'categoryPostTypes' => array_values(get_taxonomy('category') ? get_taxonomy('category')->object_type : []),
+                'categoriesWarning' => __('Please select at least one category', 'seo-automated-link-building'),
             ));
 
             return;
@@ -337,6 +383,9 @@ class Plugin
             case_sensitive tinyint(1) NOT NULL default 0,
             titleattr varchar(255),
             priority mediumint(9) NOT NULL DEFAULT 0,
+            origin varchar(20),
+            category_mode varchar(20),
+            category_ids text,
             PRIMARY KEY  (id)
         ) $charset_collate;";
 
@@ -414,6 +463,15 @@ class Plugin
 
         $domain = static::$domain;
         delete_option("{$domain}_db_version");
+
+        // KI-Modus: API-Key und offene Vorschläge entfernen. Der Zähler der
+        // Testversion bleibt bewusst erhalten, sonst ließe sich das Limit durch
+        // Neuinstallation zurücksetzen.
+        delete_option("{$domain}_ai");
+        delete_option("{$domain}_ai_run");
+        delete_option("{$domain}_ai_brief");
+        delete_option("{$domain}_pro_paused");
+        delete_metadata('user', 0, "{$domain}_license_notice_dismissed", '', true);
     }
 
     public function addActionLinks($links)
@@ -483,6 +541,55 @@ class Plugin
             'seo-automated-link-building-settings',
             [$this, 'renderSettings']
         );
+
+        $this->addAiMenuItem();
+    }
+
+    /**
+     * KI-Modus: in der Basis-Version nur eine Vorschau-Seite ohne Funktion,
+     * ProPlugin ersetzt sie durch den echten KI-Modus.
+     *
+     * @return void
+     */
+    protected function addAiMenuItem()
+    {
+        $hook = add_submenu_page(
+            'seo-automated-link-building-all-links',
+            __('AI mode', 'seo-automated-link-building'),
+            __('AI mode', 'seo-automated-link-building'),
+            $this->getUserCapability(),
+            'seo-automated-link-building-ai',
+            [$this, 'renderAiTeaser'],
+            1 // direkt nach "Alle Links"
+        );
+        if ($hook) {
+            add_action("load-$hook", [$this, 'enqueueAiTeaserStyles']);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function enqueueAiTeaserStyles()
+    {
+        wp_enqueue_style('seo-automated-link-building-ai-teaser', plugins_url('/css/ai-teaser.css', $this->name), [], '1.0.0');
+    }
+
+    /**
+     * @return void
+     */
+    public function renderAiTeaser()
+    {
+        $upgradeUrl = '';
+        $trialUrl = '';
+        if (function_exists('ilm_fs')) {
+            $upgradeUrl = ilm_fs()->get_upgrade_url();
+            if (ilm_fs()->has_trial_plan() && !ilm_fs()->is_trial_utilized()) {
+                $trialUrl = ilm_fs()->get_trial_url();
+            }
+        }
+
+        include __DIR__ . '/templates/ai-teaser.php';
     }
 
 	/**
@@ -533,6 +640,7 @@ class Plugin
         $hasActiveFlag = isset($_REQUEST['active']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $onlyActive = $hasActiveFlag && $_REQUEST['active'] === '1'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $onlyInactive = $hasActiveFlag && $_REQUEST['active'] === '0'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $onlyAi = isset($_REQUEST['origin']) && $_REQUEST['origin'] === Link::ORIGIN_AI; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         // translations
         $linksHeadline = __('All Links', 'seo-automated-link-building');
@@ -540,11 +648,13 @@ class Plugin
         $allTitle = __('All');
         $activeTitle = __('Active', 'seo-automated-link-building');
         $inactiveTitle = __('Deactivated', 'seo-automated-link-building');
+        $aiTitle = __('AI', 'seo-automated-link-building');
 
         // data
         $linksCount = Link::query()->select("count(*)")->get_var();
         $activeLinksCount = Link::query()->select("count(*)")->where('active', true)->get_var();
         $inactiveLinksCount = Link::query()->select("count(*)")->where('active', false)->get_var();
+        $aiLinksCount = Link::query()->select("count(*)")->where('origin', Link::ORIGIN_AI)->get_var();
 
         include __DIR__ . '/templates/list.php';
     }
@@ -629,6 +739,9 @@ class Plugin
         $partlyMatch = $link->partly_match;
         $target = $link->target;
         $caseSensitive = $link->case_sensitive;
+        $categoryConditionAvailable = $this->canEditCategoryConditions();
+        $categoryMode = $link->getCategoryMode();
+        $categoryIds = $link->getCategoryIds();
 
         include __DIR__ . '/templates/edit.php';
     }
@@ -698,7 +811,28 @@ class Plugin
         $link->notitle = array_key_exists('notitle', $data) && $data['notitle'] === 'on' ? 1 : 0;
         $link->partly_match = array_key_exists('partly_match', $data) && $data['partly_match'] === 'on' ? 1 : 0;
         $link->target = $data['target'] === '_self' ? '_self' : '_blank';
+        if ($this->canEditCategoryConditions()) {
+            $categoryMode = isset($data['category_mode']) ? sanitize_key($data['category_mode']) : '';
+            $categoryMode = in_array($categoryMode, [Link::CATEGORY_MODE_SAME, Link::CATEGORY_MODE_SELECTED], true) ? $categoryMode : null;
+            $categoryIds = $categoryMode === Link::CATEGORY_MODE_SELECTED && isset($data['category_ids']) ? array_filter(wp_parse_id_list($data['category_ids'])) : [];
+            $link->category_mode = $categoryMode;
+            $link->category_ids = $categoryIds ? json_encode(array_values($categoryIds)) : null;
+        }
         $link->save();
+
+        if ($link->getCategoryMode() === Link::CATEGORY_MODE_SAME && !$this->getTargetCategories($link)) {
+            $this->addAdminMessage(sprintf(
+                /* translators: %s: internal link title */
+                __('The target of the link "%s" has no categories. With the condition "same category" it is not set anywhere.', 'seo-automated-link-building'),
+                esc_html($link->title)
+            ), 'warning');
+        } elseif ($link->getCategoryMode() === Link::CATEGORY_MODE_SELECTED && !$link->getCategoryIds()) {
+            $this->addAdminMessage(sprintf(
+                /* translators: %s: internal link title */
+                __('No categories are selected for the link "%s", so it is not set anywhere.', 'seo-automated-link-building'),
+                esc_html($link->title)
+            ), 'warning');
+        }
 
 		do_action('seo_automated_link_added', $link);
 
@@ -827,13 +961,21 @@ class Plugin
             wp_die();
         }
 
+        if ( $this->isForeignRequest() ) {
+            wp_die();
+        }
+
         $data = $this->getPostData(array('title', 'source_url', 'destination_url'));
 
         // get id and validate it
-        $id = $data['link_id'];
-        $id = is_int($id) || ctype_digit($id) ? (int)$id : null;
-        if(!$id) {
+        $id = $data['link_id'] ?? null;
+        $id = is_int($id) || (is_string($id) && ctype_digit($id)) ? (int)$id : null;
+        if(!$id || !Link::get($id)) {
             // if not valid, return
+            wp_die();
+        }
+
+        if ( ! $this->isOwnSiteUrl( (string) ( $data['source_url'] ?? '' ) ) ) {
             wp_die();
         }
 
@@ -844,6 +986,47 @@ class Plugin
             'destination_url' => esc_url_raw($data['destination_url']),
         ]);
         wp_die();
+    }
+
+    /**
+     * Prüft, ob der Request laut Origin- bzw. Referer-Header von einer fremden Website kommt.
+     *
+     * Fehlen beide Header (z.B. bei Referrer-Policy "no-referrer" sendet der Browser "Origin: null"
+     * und keinen Referer), wird der Request nicht abgelehnt, damit die Statistik dort weiter funktioniert.
+     */
+    protected function isForeignRequest(): bool
+    {
+        $origin = isset( $_SERVER['HTTP_ORIGIN'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_ORIGIN'] ) ) : '';
+        if ( $origin !== '' && $origin !== 'null' ) {
+            return ! $this->isOwnSiteUrl( $origin );
+        }
+
+        $referer = isset( $_SERVER['HTTP_REFERER'] ) ? esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
+        if ( $referer !== '' ) {
+            return ! $this->isOwnSiteUrl( $referer );
+        }
+
+        return false;
+    }
+
+    /**
+     * Prüft, ob die URL auf die Domain dieser WordPress-Installation zeigt.
+     */
+    protected function isOwnSiteUrl( string $url ): bool
+    {
+        $host = wp_parse_url( $url, PHP_URL_HOST );
+        if ( ! is_string( $host ) || $host === '' ) {
+            return false;
+        }
+
+        $allowedHosts = array_filter( [
+            wp_parse_url( home_url(), PHP_URL_HOST ),
+            wp_parse_url( site_url(), PHP_URL_HOST ),
+        ] );
+        // z.B. für Mehrsprachigkeit mit eigener Domain pro Sprache
+        $allowedHosts = (array) apply_filters( 'seo_automated_link_building_tracking_hosts', $allowedHosts );
+
+        return in_array( strtolower( $host ), array_map( 'strtolower', $allowedHosts ), true );
     }
 
     private function normalizeUrl($url) {
@@ -980,8 +1163,81 @@ class Plugin
             return true;
         });
 
+        // Kategorie-Bedingung der einzelnen Links
+        $sourceCategories = $this->getSourceCategories($type);
+        $links = array_filter($links, function(Link $link) use($sourceCategories) {
+            return $this->matchesCategoryCondition($link, $sourceCategories);
+        });
+
         return (new TextConverter($content))
             ->addLinks($links)
             ->getText();
     }
+
+	/**
+	 * Kategorien des Beitrags, in dessen Inhalt verlinkt wird. Leer, wenn der Inhalt
+	 * zu keinem Beitrag mit Kategorien gehört (z. B. Seiten oder Archiv-Beschreibungen).
+	 *
+	 * @param string $type
+	 *
+	 * @return int[]
+	 */
+	public function getSourceCategories($type = 'post') {
+		global $post;
+
+		if (!in_array($type, self::$postContentTypes, true) || !$post instanceof \WP_Post || !is_object_in_taxonomy($post->post_type, 'category')) {
+			return [];
+		}
+
+		$categories = array_map('intval', wp_get_post_categories($post->ID));
+		sort($categories);
+
+		return $categories;
+	}
+
+	/**
+	 * Kategorien des Linkziels: der gewählte Beitrag oder der Beitrag hinter einer
+	 * eigenen URL dieser Website. Leer bei Seiten, Inhaltstypen ohne Kategorien
+	 * und externen URLs.
+	 *
+	 * @param Link $link
+	 *
+	 * @return int[]
+	 */
+	protected function getTargetCategories(Link $link) {
+		if ($link->id && array_key_exists((int) $link->id, $this->targetCategories)) {
+			return $this->targetCategories[(int) $link->id];
+		}
+
+		$postId = $link->page_id ? (int) $link->page_id : url_to_postid((string) $link->url);
+		$target = $postId ? get_post($postId) : null;
+		$categories = [];
+		if ($target && is_object_in_taxonomy($target->post_type, 'category')) {
+			$categories = array_map('intval', wp_get_post_categories($target->ID));
+		}
+
+		if ($link->id) {
+			$this->targetCategories[(int) $link->id] = $categories;
+		}
+
+		return $categories;
+	}
+
+	/**
+	 * @param Link  $link
+	 * @param int[] $sourceCategories
+	 *
+	 * @return bool
+	 */
+	protected function matchesCategoryCondition(Link $link, array $sourceCategories) {
+		$mode = $link->getCategoryMode();
+		if ($mode === Link::CATEGORY_MODE_ALL) {
+			return true;
+		}
+
+		$required = $mode === Link::CATEGORY_MODE_SAME ? $this->getTargetCategories($link) : $link->getCategoryIds();
+
+		// eine gemeinsame Kategorie genügt
+		return !empty(array_intersect($sourceCategories, $required));
+	}
 }

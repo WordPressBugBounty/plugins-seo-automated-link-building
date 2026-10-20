@@ -4,7 +4,7 @@ Tags: seo, link building, search engine optimization, user experience, internal 
 Requires PHP: 7.4
 Requires at least: 5.0
 Tested up to: 7.1
-Stable tag: 3.1.2
+Stable tag: 3.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,7 +29,7 @@ Show Google your website structure – and guide your visitors specifically thro
 **Start directly for free with the Basic version**
 Our free Basic version already provides you with the perfect tool for automated linking – you don't need any technical know-how.
 
-If you want even more control, the **Pro version** offers additional features such as WooCommerce & ACF support, Caching for maximum performance, and Prioritized email support.
+If you want even more control, the **Pro version** offers additional features such as WooCommerce & ACF support, category conditions per link, Caching for maximum performance, and Prioritized email support.
 
 == Installation ==
 
@@ -63,6 +63,14 @@ We’re sorry that you’ve encountered a problem – your feedback is extremely
 2. Configuration page for automated keyword linking.
 
 == Changelog ==
+
+= 3.2.0 =
+* New Pro feature: AI mode – let AI (Google Gemini, OpenAI or Anthropic Claude with your own API key) analyze your website, suggest target pages and keywords, and publish the reviewed links with one click
+* New Pro feature: category conditions per link – set a link only in posts that share a category with the link target, or only in posts of selected categories
+* Detection of orphaned pages without internal links in the AI mode
+* Fixed total count in the link list pagination when filtering
+* Fixed deprecation warnings in PHP 8.4
+* Security: link click statistics are only recorded for requests from your own website (origin and source URL check)
 
 = 3.1.2 =
 * Fix: Skip non string values (e.g. Flexible Content, Repeater, Group, Gallery, Relationship) in ACF Extension. Otherwise they would be processed if an identically named text field exists

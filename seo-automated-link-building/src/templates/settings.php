@@ -25,7 +25,7 @@ $save_disabled = false;
 $action = '';
 ?>
 
-<div class="wrap ilm-settings">
+<div class="wrap ilm-admin ilm-settings">
     <h1 class="wp-heading-inline"><?php esc_html_e( 'Settings', 'seo-automated-link-building' ); ?></h1>
 
     <form id="save-settings" method="post" action="<?php echo esc_url( $adminPostUrl ); ?>">

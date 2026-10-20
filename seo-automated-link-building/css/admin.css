@@ -1,0 +1,420 @@
+/**
+ * Internal Links Manager: shared admin design system.
+ * Scoped under .ilm-admin so nothing leaks into the rest of wp-admin.
+ * Accent follows the user's admin colour scheme (--wp-admin-theme-color),
+ * falling back to the default WordPress blue.
+ */
+.ilm-admin {
+    --ilm-accent: var(--wp-admin-theme-color, #2271b1);
+    --ilm-accent-soft: #f0f6fc;
+    --ilm-text: #1d2327;
+    --ilm-text-soft: #50575e;
+    --ilm-muted: #646970;
+    --ilm-border: #dcdcde;
+    --ilm-border-strong: #c3c4c7;
+    --ilm-card-bg: #fff;
+    --ilm-radius: 8px;
+    --ilm-pro-bg: #f4ecff;
+    --ilm-pro-text: #6b3fa0;
+    --ilm-pro-border: #e0ccf7;
+}
+
+/* Padding innerhalb der angegebenen Breite halten. */
+.ilm-admin .ilm-card,
+.ilm-admin .ilm-metric,
+.ilm-admin .ilm-tablecard,
+.ilm-admin .ilm-dropzone__target,
+.ilm-admin .ilm-field textarea,
+.ilm-admin .ilm-field input[type="text"] { box-sizing: border-box; }
+
+/* ---------- Layout ---------- */
+.ilm-admin .ilm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+/* ---------- Card ---------- */
+.ilm-admin .ilm-card {
+    background: var(--ilm-card-bg);
+    border: 1px solid var(--ilm-border);
+    border-radius: var(--ilm-radius);
+    padding: 22px 24px;
+    margin: 0 0 16px;
+    max-width: 760px;
+}
+.ilm-admin .ilm-card--wide { max-width: none; }
+.ilm-admin .ilm-card__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ilm-text);
+    margin: 0 0 18px;
+    padding: 0 0 14px;
+    border-bottom: 1px solid var(--ilm-border);
+}
+
+/* ---------- Field ---------- */
+.ilm-admin .ilm-field { margin: 0 0 20px; }
+.ilm-admin .ilm-field:last-child { margin-bottom: 0; }
+.ilm-admin .ilm-label {
+    display: block;
+    font-weight: 600;
+    color: var(--ilm-text);
+    margin: 0 0 6px;
+    font-size: 13px;
+}
+.ilm-admin .ilm-field .description { margin-top: 6px; color: var(--ilm-muted); }
+.ilm-admin .ilm-field input[type="text"],
+.ilm-admin .ilm-field input[type="url"],
+.ilm-admin .ilm-field input[type="number"],
+.ilm-admin .ilm-field select { max-width: 100%; }
+.ilm-admin .ilm-field textarea { min-width: min(100%, 460px); max-width: 100%; }
+.ilm-admin .ilm-req { color: #d63638; }
+.ilm-admin .ilm-inline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- Switch ----------
+   The checkbox itself IS the switch (appearance: none). It stays visible and
+   focusable, so assistive tech and automated tests can operate it normally. */
+.ilm-admin .ilm-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--ilm-text);
+}
+.ilm-admin input[type="checkbox"].ilm-switch__input {
+    -webkit-appearance: none;
+    appearance: none;
+    position: relative;
+    width: 38px;
+    height: 22px;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 11px;
+    background: var(--ilm-border-strong);
+    cursor: pointer;
+    transition: background .15s ease;
+}
+.ilm-admin input[type="checkbox"].ilm-switch__input::before { content: none; }
+.ilm-admin input[type="checkbox"].ilm-switch__input::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    transition: left .15s ease;
+}
+.ilm-admin input[type="checkbox"].ilm-switch__input:checked { background: var(--ilm-accent); }
+.ilm-admin input[type="checkbox"].ilm-switch__input:checked::after { left: 18px; }
+.ilm-admin input[type="checkbox"].ilm-switch__input:focus {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ilm-accent);
+    outline: 2px solid transparent;
+}
+.ilm-admin input[type="checkbox"].ilm-switch__input:disabled { opacity: .5; cursor: default; }
+
+/* Native checkboxes/radios elsewhere just get the accent colour. */
+.ilm-admin input[type="checkbox"]:not(.ilm-switch__input),
+.ilm-admin input[type="radio"] { accent-color: var(--ilm-accent); }
+
+/* ---------- Segmented control (real buttons, always visible/clickable) ---------- */
+.ilm-admin .ilm-seg {
+    display: inline-flex;
+    border: 1px solid var(--ilm-border-strong);
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+}
+.ilm-admin .ilm-seg__btn {
+    padding: 7px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ilm-text-soft);
+    cursor: pointer;
+    background: #fff;
+    border: 0;
+    border-right: 1px solid var(--ilm-border-strong);
+    text-decoration: none;
+}
+.ilm-admin .ilm-seg__btn:last-child { border-right: 0; }
+.ilm-admin .ilm-seg__btn:hover { background: var(--ilm-accent-soft); color: var(--ilm-accent); }
+.ilm-admin .ilm-seg__btn.is-active,
+.ilm-admin .ilm-seg__btn.active { background: var(--ilm-accent); color: #fff; }
+.ilm-admin .ilm-seg__btn:focus { outline: 2px solid var(--ilm-accent); outline-offset: -2px; }
+
+/* ---------- Radio group (native radios, styled layout) ---------- */
+.ilm-admin .ilm-radios { display: flex; flex-direction: column; gap: 10px; }
+.ilm-admin .ilm-radios label { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+
+/* ---------- Keyword chip ----------
+   Trennt mehrere Keywords sichtbar voneinander (Keywords dürfen Leerzeichen
+   enthalten); bewusst neutral gehalten, damit die Liste ruhig bleibt. */
+.ilm-admin .ilm-chip {
+    display: inline-block;
+    background: #f0f0f1;
+    color: var(--ilm-text);
+    border: 1px solid var(--ilm-border);
+    padding: 1px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    margin: 2px 4px 2px 0;
+}
+
+/* ---------- Origin badge ----------
+   Markiert in der Linkliste vom KI-Modus angelegte Links. */
+.ilm-admin .ilm-origin-badge {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 0 7px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 18px;
+    background: #f4ecff;
+    color: #6b3fa0;
+    border: 1px solid #e0ccf7;
+    vertical-align: middle;
+}
+
+/* ---------- Metric cards ---------- */
+.ilm-admin .ilm-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin: 0 0 16px;
+    max-width: 760px;
+}
+.ilm-admin .ilm-metric {
+    background: #fff;
+    border: 1px solid var(--ilm-border);
+    border-radius: var(--ilm-radius);
+    padding: 18px 20px;
+}
+.ilm-admin .ilm-metric__value { font-size: 26px; font-weight: 600; color: var(--ilm-text); line-height: 1.2; }
+.ilm-admin .ilm-metric__label { font-size: 12px; color: var(--ilm-muted); margin-top: 2px; }
+
+/* ---------- Pro upsell ---------- */
+.ilm-admin .ilm-pro {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--ilm-pro-bg);
+    color: var(--ilm-pro-text);
+    border: 1px solid var(--ilm-pro-border);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 1px 9px;
+    border-radius: 10px;
+}
+.ilm-admin .ilm-prorow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid #f0f0f1;
+}
+.ilm-admin .ilm-prorow:first-of-type { border-top: 0; }
+.ilm-admin .ilm-prorow__main { display: flex; align-items: center; gap: 8px; color: var(--ilm-text-soft); }
+.ilm-admin .ilm-prorow__desc { font-size: 12px; color: var(--ilm-muted); margin: 3px 0 0; }
+
+/* ---------- Filters ---------- */
+.ilm-admin .ilm-filters { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.ilm-admin .ilm-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 13px;
+    font-size: 12px;
+    text-decoration: none;
+    color: var(--ilm-text-soft);
+    border: 1px solid var(--ilm-border);
+    background: #fff;
+}
+.ilm-admin .ilm-filter:hover { border-color: var(--ilm-accent); color: var(--ilm-accent); }
+.ilm-admin .ilm-filter.is-active { background: var(--ilm-accent); color: #fff; border-color: var(--ilm-accent); }
+.ilm-admin .ilm-filter .count { opacity: .8; }
+
+/* ---------- Option list (radios/checkboxes) ---------- */
+.ilm-admin .ilm-optionlist { display: flex; flex-direction: column; gap: 10px; }
+.ilm-admin .ilm-optionlist label { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--ilm-text); }
+/* Radio/Checkbox an der ersten Textzeile ausrichten, nicht an der Box-Oberkante. */
+.ilm-admin .ilm-optionlist label input[type="radio"],
+.ilm-admin .ilm-optionlist label input[type="checkbox"] { margin: 2px 0 0; flex-shrink: 0; }
+
+/* Aktionsleiste am Kartenfuß */
+.ilm-admin .ilm-card__actions { margin: 18px 0 0; }
+
+/* ---------- Dropzone ----------
+   Das Formular selbst bleibt neutral; nur .ilm-dropzone__target ist der
+   sichtbare Ablagebereich und (per JS) das einzige klickbare Element. */
+.ilm-admin form.ilm-dropzone.dropzone {
+    border: 0;
+    background: none;
+    padding: 0;
+    min-height: auto;
+}
+.ilm-admin .ilm-dropzone .dz-message { display: none; }
+
+.ilm-admin .ilm-dropzone__target {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    border: 2px dashed var(--ilm-border-strong);
+    border-radius: 10px;
+    background: #fbfbfc;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+}
+.ilm-admin .ilm-dropzone__target:hover {
+    border-color: var(--ilm-accent);
+    background: var(--ilm-accent-soft);
+}
+.ilm-admin .ilm-dropzone__icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: var(--ilm-accent);
+    margin-bottom: 4px;
+}
+.ilm-admin .ilm-dropzone__title { font-size: 14px; font-weight: 600; color: var(--ilm-text); }
+.ilm-admin .ilm-dropzone__hint { font-size: 13px; color: var(--ilm-accent); text-decoration: underline; }
+.ilm-admin .ilm-dropzone__formats { font-size: 12px; color: var(--ilm-muted); margin-top: 4px; }
+
+/* Datei wird über den Bereich gezogen */
+.ilm-admin form.ilm-dropzone.dz-drag-hover .ilm-dropzone__target {
+    border-color: var(--ilm-accent);
+    border-style: solid;
+    background: var(--ilm-accent-soft);
+}
+/* Datei-Vorschauen, die Dropzone nach dem Ablegen einfügt */
+.ilm-admin .ilm-dropzone .dz-preview { margin-top: 12px; }
+
+/* ---------- Buttons ---------- */
+.ilm-admin .button-danger { color: #b32d2e; border-color: #b32d2e; background: #fff; }
+.ilm-admin .button-danger:hover { color: #8a2424; border-color: #8a2424; background: #fcf0f1; }
+.ilm-admin a.button.export { display: inline-flex; align-items: center; gap: 6px; margin: 0; }
+
+/* ---------- Help tooltip ----------
+   Als <button> ausgezeichnet (fokussierbar, korrekte Semantik); die
+   Button-Optik wird hier zurückgesetzt, es bleibt nur das Icon. */
+.ilm-admin button.ilm-tip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--ilm-muted);
+    cursor: help;
+    vertical-align: middle;
+    line-height: 1;
+}
+.ilm-admin .ilm-tip .dashicons { font-size: 16px; width: 16px; height: 16px; }
+.ilm-admin .ilm-tip:hover, .ilm-admin .ilm-tip:focus-visible { color: var(--ilm-accent); }
+.ilm-admin .ilm-tip:focus-visible { outline: 2px solid var(--ilm-accent); outline-offset: 2px; }
+.ilm-admin .ilm-tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    top: calc(100% + 9px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    width: max-content;
+    max-width: 260px;
+    background: #1d2327;
+    color: #fff;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 8px 11px;
+    border-radius: 6px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease, transform .15s ease;
+    z-index: 120;
+}
+.ilm-admin .ilm-tip::before {
+    content: "";
+    position: absolute;
+    top: calc(100% + 3px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    border: 6px solid transparent;
+    border-bottom-color: #1d2327;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease, transform .15s ease;
+    z-index: 120;
+}
+.ilm-admin .ilm-tip:hover::after, .ilm-admin .ilm-tip:focus-visible::after,
+.ilm-admin .ilm-tip:hover::before, .ilm-admin .ilm-tip:focus-visible::before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- Disabled (Pro preview) fields ---------- */
+.ilm-admin .ilm-field.disabled,
+.ilm-admin .ilm-field.disabled .ilm-label,
+.ilm-admin .ilm-field.disabled .description { color: var(--ilm-muted); }
+.ilm-admin .ilm-field.disabled input,
+.ilm-admin .ilm-field.disabled select { color: var(--ilm-muted); }
+
+/* ---------- Kategorie-Bedingung (Link bearbeiten) ---------- */
+.ilm-admin .ilm-category-list {
+    box-sizing: border-box;
+    width: 25em;
+    max-width: 100%;
+    max-height: 220px;
+    overflow: auto;
+    border: 1px solid #949494;
+    border-radius: 2px;
+    background: #fff;
+    padding: 4px 12px;
+}
+.ilm-admin .ilm-category-list ul { margin: 0; }
+.ilm-admin .ilm-category-list li { list-style: none; margin: 6px 0; }
+.ilm-admin .ilm-category-list ul.children { margin: 6px 0 0 1rem; }
+.ilm-admin .ilm-field-warning {
+    margin: 8px 0 0;
+    padding: 8px 12px;
+    border-left: 4px solid #dba617;
+    background: #fcf9e8;
+    color: #1e1e1e;
+}
+
+
+/* ---------- Tabs / table polish ---------- */
+.ilm-admin .nav-tab-wrapper { margin-bottom: 16px; }
+/* settings.css färbt den Tab-Bereich weiß; die Karten brauchen den grauen
+   Seitenhintergrund als Kontrast. */
+.ilm-admin.ilm-settings .tab-content {
+    background: transparent;
+    padding-left: 0;
+}
+.ilm-admin .ilm-tablecard {
+    overflow-x: auto;
+    background: #fff;
+    border: 1px solid var(--ilm-border);
+    border-radius: var(--ilm-radius);
+    padding: 8px 12px 12px;
+    margin: 12px 0 16px;
+}
+.ilm-admin .ilm-tablecard .wp-list-table { border: 0; box-shadow: none; }
+.ilm-admin .ilm-chart-wrap { position: relative; height: 360px; width: 100%; }

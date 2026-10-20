@@ -72,6 +72,7 @@ class LinksList extends \WP_List_Table {
 
 		$search  = isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$active  = isset( $_REQUEST['active'] ) ? $_REQUEST['active'] === '1' : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$origin  = isset( $_REQUEST['origin'] ) && $_REQUEST['origin'] === Link::ORIGIN_AI ? Link::ORIGIN_AI : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$orderBy = isset( $_REQUEST['orderby'] ) ? sanitize_sql_orderby( wp_unslash( $_REQUEST['orderby'] ) ) : 'title'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$order   = isset( $_REQUEST['order'] ) && $_REQUEST['order'] === 'desc' ? 'desc' : 'asc'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$select  = Link::query()->limit( $this->limit )->offset( $offset )->order_by( $orderBy, $order );
@@ -81,11 +82,21 @@ class LinksList extends \WP_List_Table {
 		if ( ! is_null( $active ) ) {
 			$select = $select->where( 'active', $active );
 		}
+		if ( ! is_null( $origin ) ) {
+			$select = $select->where( 'origin', $origin );
+		}
 		$this->items = $select->get();
 
 		$all = Link::query()->select( "count(*)" );
 		if ( ! empty( $search ) ) {
 			$all = $all->where( 'title', 'LIKE', '%' . Link::wpdb()->esc_like( $search ) . '%' );
+		}
+		// Gesamtzahl für die Paginierung mit denselben Filtern wie die Liste
+		if ( ! is_null( $active ) ) {
+			$all = $all->where( 'active', $active );
+		}
+		if ( ! is_null( $origin ) ) {
+			$all = $all->where( 'origin', $origin );
 		}
 
 		$this->set_pagination_args( array(
@@ -155,7 +166,7 @@ class LinksList extends \WP_List_Table {
 	}
 
 	protected function column_default( $item, $column_name ) {
-		return $item->{$column_name};
+		return esc_html( $item->{$column_name} );
 	}
 
 	/**
@@ -177,12 +188,19 @@ class LinksList extends \WP_List_Table {
 		$delete_url = add_query_arg(['action' => 'delete', 'id' => $item->id], $base);
 		$delete_url = wp_nonce_url($delete_url, "row-action-delete-{$item->id}");
 
-		return "<strong><a href='{$edit_url}'>{$item->title}</a></strong>
-        <div class='row-actions'>
-            <span class='edit'><a href='{$edit_url}'>" . __('Edit') . "</a> | </span>
-            <span class='activation'><a href='{$toggle_url}'>" . __($item->active ? 'Deactivate' : 'Activate') . "</a> | </span>
-            <span class='trash'><a href='{$delete_url}'>" . __('Delete') . "</a></span>
-        </div>";
+		$title = '' !== (string) $item->title ? $item->title : __( '(no title)', 'seo-automated-link-building' );
+
+		$originBadge = '';
+		if ( $item->origin === Link::ORIGIN_AI ) {
+			$originBadge = ' <span class="ilm-origin-badge" title="' . esc_attr__( 'Created by AI mode', 'seo-automated-link-building' ) . '">' . esc_html__( 'AI', 'seo-automated-link-building' ) . '</span>';
+		}
+
+		return '<strong><a href="' . esc_url( $edit_url ) . '">' . esc_html( $title ) . '</a></strong>' . $originBadge . '
+        <div class="row-actions">
+            <span class="edit"><a href="' . esc_url( $edit_url ) . '">' . esc_html__( 'Edit' ) . '</a> | </span>
+            <span class="activation"><a href="' . esc_url( $toggle_url ) . '">' . esc_html( $item->active ? __( 'Deactivate' ) : __( 'Activate' ) ) . '</a> | </span>
+            <span class="trash"><a href="' . esc_url( $delete_url ) . '">' . esc_html__( 'Delete' ) . '</a></span>
+        </div>';
 	}
 
 	protected function column_url( $item ) {
@@ -196,7 +214,7 @@ class LinksList extends \WP_List_Table {
 			}
 		}
 
-		return "<a href='$url' target='_blank'>" . htmlentities( $title ) . "</a>";
+		return '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html( $title ) . '</a>';
 	}
 
 	protected function column_keywords( $item ) {
@@ -205,11 +223,21 @@ class LinksList extends \WP_List_Table {
 			$keywords = [];
 		}
 
-		return implode( '<br>', $keywords );
+		if ( empty( $keywords ) ) {
+			return '';
+		}
+
+		$chips = array_map( function ( $keyword ) {
+			return '<span class="ilm-chip">' . esc_html( $keyword ) . '</span>';
+		}, $keywords );
+
+		return implode( ' ', $chips );
 	}
 
 	protected function column_status( $item ) {
-		return __( $item->active ? 'Active' : 'Deactivated', 'seo-automated-link-building' );
+		return $item->active
+			? esc_html__( 'Active', 'seo-automated-link-building' )
+			: esc_html__( 'Deactivated', 'seo-automated-link-building' );
 	}
 
 }

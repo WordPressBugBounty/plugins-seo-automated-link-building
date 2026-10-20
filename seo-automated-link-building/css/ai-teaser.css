@@ -1,0 +1,152 @@
+/**
+ * Internal Links Manager – Vorschau des KI-Modus (Basis-Version).
+ * Optik wie src/Pro/css/ai-mode.css, aber eigenständig: der Pro-Ordner fehlt
+ * in der Basis-Version.
+ */
+.ilm-ai-teaser {
+    --ilm-accent: var(--wp-admin-theme-color, #2271b1);
+    --ilm-accent-soft: #f0f6fc;
+    --ilm-text: #1d2327;
+    --ilm-text-soft: #50575e;
+    --ilm-muted: #646970;
+    --ilm-border: #dcdcde;
+    --ilm-border-strong: #c3c4c7;
+    --ilm-radius: 8px;
+    --ilm-pro-bg: #f4ecff;
+    --ilm-pro-text: #6b3fa0;
+    --ilm-pro-border: #e0ccf7;
+}
+
+.ilm-ai-teaser .ilm-ai-teaser__title { display: inline-flex; align-items: center; gap: 8px; }
+.ilm-ai-teaser .ilm-ai-teaser__title > .dashicons { color: var(--ilm-accent); font-size: 24px; width: 24px; height: 24px; }
+.ilm-ai-teaser .ilm-ai-teaser__sub { margin: 2px 0 16px; color: var(--ilm-muted); }
+
+.ilm-ai-teaser .ilm-ai-teaser__pro {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--ilm-pro-text);
+    background: var(--ilm-pro-bg);
+    border: 1px solid var(--ilm-pro-border);
+    border-radius: 10px;
+}
+.ilm-ai-teaser .ilm-ai-teaser__pro .dashicons { font-size: 12px; width: 12px; height: 12px; }
+
+/* ---------- Upgrade-Hinweis ---------- */
+.ilm-ai-teaser .ilm-ai-teaser__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    box-sizing: border-box;
+    max-width: 760px;
+    margin: 0 0 16px;
+    padding: 10px 13px;
+    font-size: 13px;
+    color: var(--ilm-pro-text);
+    background: var(--ilm-pro-bg);
+    border: 1px solid var(--ilm-pro-border);
+    border-radius: var(--ilm-radius);
+}
+.ilm-ai-teaser .ilm-ai-teaser__buttons { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.ilm-ai-teaser .ilm-ai-teaser__buttons .button { margin: 0; }
+
+/* ---------- Karte ---------- */
+.ilm-ai-teaser .ilm-ai-teaser__card {
+    box-sizing: border-box;
+    max-width: 760px;
+    margin: 0 0 16px;
+    padding: 20px 24px;
+    background: #fff;
+    border: 1px solid var(--ilm-border);
+    border-radius: var(--ilm-radius);
+}
+.ilm-ai-teaser .ilm-ai-teaser__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 18px;
+    padding: 0 0 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ilm-text);
+    border-bottom: 1px solid var(--ilm-border);
+}
+.ilm-ai-teaser .ilm-ai-teaser__head .dashicons { color: var(--ilm-accent); }
+
+.ilm-ai-teaser .ilm-ai-teaser__features { margin: 0; padding: 0; list-style: none; }
+.ilm-ai-teaser .ilm-ai-teaser__features li { display: flex; gap: 9px; margin: 0 0 12px; color: var(--ilm-text-soft); }
+.ilm-ai-teaser .ilm-ai-teaser__features li:last-child { margin-bottom: 0; }
+.ilm-ai-teaser .ilm-ai-teaser__features .dashicons { flex-shrink: 0; color: var(--ilm-accent); }
+
+/* ---------- Vorschau ---------- */
+.ilm-ai-teaser .ilm-ai-teaser__label {
+    margin: 24px 0 0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ilm-muted);
+}
+.ilm-ai-teaser .ilm-ai-teaser__preview { opacity: .6; user-select: none; pointer-events: none; }
+
+.ilm-ai-teaser .ilm-ai-teaser__steps { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 16px; padding: 0; list-style: none; }
+.ilm-ai-teaser .ilm-ai-teaser__steps li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--ilm-muted);
+    background: #fff;
+    border: 1px solid var(--ilm-border);
+    border-radius: 14px;
+}
+.ilm-ai-teaser .ilm-ai-teaser__steps li.is-active { color: #fff; background: var(--ilm-accent); border-color: var(--ilm-accent); }
+.ilm-ai-teaser .ilm-ai-teaser__n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #e5e5e7;
+    color: var(--ilm-text-soft);
+    font-size: 11px;
+}
+.ilm-ai-teaser .ilm-ai-teaser__steps li.is-active .ilm-ai-teaser__n { background: rgba(255, 255, 255, .3); color: #fff; }
+
+.ilm-ai-teaser .ilm-ai-teaser__field { margin: 0 0 20px; }
+.ilm-ai-teaser .ilm-ai-teaser__field:last-child { margin-bottom: 0; }
+.ilm-ai-teaser .ilm-ai-teaser__flabel { margin: 0 0 8px; font-weight: 600; color: var(--ilm-text); }
+.ilm-ai-teaser .ilm-ai-teaser__field .description { margin: 6px 0 0; color: var(--ilm-muted); }
+.ilm-ai-teaser .ilm-ai-teaser__field .description .dashicons { font-size: 14px; width: 14px; height: 14px; vertical-align: -2px; }
+
+.ilm-ai-teaser .ilm-ai-teaser__seg {
+    display: inline-flex;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--ilm-border-strong);
+    border-radius: 6px;
+}
+.ilm-ai-teaser .ilm-ai-teaser__seg span { padding: 6px 16px; line-height: 1.5; color: var(--ilm-text-soft); border-right: 1px solid var(--ilm-border-strong); }
+.ilm-ai-teaser .ilm-ai-teaser__seg span:last-child { border-right: 0; }
+.ilm-ai-teaser .ilm-ai-teaser__seg span.is-active { color: #fff; background: var(--ilm-accent); }
+
+.ilm-ai-teaser .ilm-ai-teaser__inline { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+/* sieht aus wie ein Eingabefeld, ist aber keins */
+.ilm-ai-teaser .ilm-ai-teaser__input {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 340px;
+    height: 30px;
+    background: #fff;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+}

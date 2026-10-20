@@ -9,10 +9,10 @@ jQuery(function ($) {
         label: seoAutomatedLinkBuildingStatistic.label,
         data: seoAutomatedLinkBuildingStatistic.data,
         backgroundColor: [
-          'rgba(191, 208, 12, 0.4)',
+          'rgba(34, 113, 177, 0.15)',
         ],
         borderColor: [
-          'rgba(191, 208, 12, 1)',
+          'rgba(34, 113, 177, 1)',
         ],
         borderWidth: 3,
       }]
@@ -58,10 +58,10 @@ jQuery(function ($) {
         label: seoAutomatedLinkBuildingStatistic.label,
         data: seoAutomatedLinkBuildingStatistic.best,
         backgroundColor: [
-          'rgba(191, 208, 12, 0.4)',
+          'rgba(34, 113, 177, 0.15)',
         ],
         borderColor: [
-          'rgba(191, 208, 12, 1)',
+          'rgba(34, 113, 177, 1)',
         ],
         borderWidth: 3,
       }]

@@ -1,22 +1,55 @@
 jQuery(function ($) {
+  var $pageSearch = $('[name="pagesearch"]');
+
+  // Die Vorschlagsliste ist absolut am Suchfeld positioniert und schließt sich
+  // beim blur. Nicht jeder Browser (z. B. Firefox) löst blur aus, wenn ein
+  // fokussiertes Feld ausgeblendet wird. Daher beim Ausblenden explizit schließen.
+  var closePageSuggestions = function () {
+    $('.autocomplete-suggestions').hide();
+    if (document.activeElement === $pageSearch[0]) {
+      $pageSearch[0].blur();
+    }
+  };
+
+  var selectedPage = null;
+
+  // Kategorie-Bedingung: Kategorieauswahl nur bei "selected", Hinweis bei "same",
+  // wenn das Ziel keine Kategorien haben kann (Seite, eigene URL, ...)
+  var updateCategoryCondition = function () {
+    var mode = $('#ilm-category-mode').val();
+    var useCustomUrl = $('#ilm-target-url').is(':visible');
+    var targetWithoutCategories = useCustomUrl
+      || (selectedPage && $.inArray(selectedPage.type, seoAutomatedLinkBuildingEdit.categoryPostTypes || []) === -1);
+    $('#ilm-category-selection').toggle(mode === 'selected');
+    $('#ilm-category-target-hint').toggle(mode === 'same' && !!targetWithoutCategories);
+  };
+
   var setPageResult = function (page) {
+    selectedPage = page || null;
     if (page) {
       $('[name="page"]').val(page.id);
       $('#page-result').show();
       $('#page-result .text').text(page.title);
       $('#no-page-result').hide();
+      closePageSuggestions();
     } else {
       $('[name="page"]').val('');
       $('#page-result').hide();
       $('#no-page-result').show();
     }
+    updateCategoryCondition();
+  };
+
+  var warn = function ($form, message) {
+    showAdminNotice($form, message, 'error');
+    $('html, body').animate({ scrollTop: Math.max(0, $form.offset().top - 60) }, 200);
   };
 
   $('.seo-automated-link-building-form').on('submit', function (e) {
     var $form = $(this);
     var title = $.trim($form.find('[name="title"]').val());
     if (!title) {
-      alert(seoAutomatedLinkBuildingEdit.titleWarning);
+      warn($form, seoAutomatedLinkBuildingEdit.titleWarning);
       e.preventDefault();
       e.stopPropagation();
       return;
@@ -26,7 +59,7 @@ jQuery(function ($) {
     if ($urlInput.is(':visible')) {
       var url = $.trim($form.find('[name="url"]').val());
       if (!url) {
-        alert(seoAutomatedLinkBuildingEdit.urlWarning);
+        warn($form, seoAutomatedLinkBuildingEdit.urlWarning);
         e.preventDefault();
         e.stopPropagation();
         return;
@@ -34,7 +67,7 @@ jQuery(function ($) {
     } else {
       var page = $.trim($form.find('[name="page"]').val());
       if (!page) {
-        alert(seoAutomatedLinkBuildingEdit.pageWarning);
+        warn($form, seoAutomatedLinkBuildingEdit.pageWarning);
         e.preventDefault();
         e.stopPropagation();
         return;
@@ -43,15 +76,28 @@ jQuery(function ($) {
 
     var keywords = taggle.getTagValues();
     if (!keywords.length) {
-      alert(seoAutomatedLinkBuildingEdit.keywordsWarning);
+      warn($form, seoAutomatedLinkBuildingEdit.keywordsWarning);
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    var $categoryMode = $form.find('[name="category_mode"]');
+    if (!$categoryMode.prop('disabled') && $categoryMode.val() === 'selected'
+      && !$form.find('[name="category_ids[]"]:checked').length) {
+      warn($form, seoAutomatedLinkBuildingEdit.categoriesWarning);
       e.preventDefault();
       e.stopPropagation();
       return;
     }
   });
 
-  $('[name="pagesearch"]').autoComplete({
+  $('#ilm-category-mode').on('change', updateCategoryCondition);
+
+  $pageSearch.autoComplete({
     minChars: 0,
+    // cache deaktiviert, da Firefox die Suchergebnisse sonst nach Auswahl nicht ausblendet
+    cache: false,
     source: function (term, response) {
       try {
         xhr.abort();
@@ -61,7 +107,10 @@ jQuery(function ($) {
         action: 'seo_automated_link_building_find_pages',
         search: term
       }, function (data) {
-        response(data);
+        // Eine verspätete Antwort würde die Liste sonst am ausgeblendeten Feld öffnen.
+        if ($pageSearch.is(':visible')) {
+          response(data);
+        }
       }, 'json');
     },
     renderItem: function (item, search) {
@@ -80,20 +129,26 @@ jQuery(function ($) {
     },
   });
 
+  // Umschaltung Seitenauswahl <-> eigene URL
+  var selectTarget = function (useCustomUrl) {
+    if (useCustomUrl) {
+      closePageSuggestions();
+    }
+    $('#ilm-target-page').toggle(!useCustomUrl);
+    $('#ilm-target-url').toggle(useCustomUrl);
+    $('#useCustomUrl').toggleClass('is-active', useCustomUrl);
+    $('#useWebsitePage').toggleClass('is-active', !useCustomUrl);
+    updateCategoryCondition();
+  };
+
   $('#useCustomUrl').on('click', function (e) {
     e.preventDefault();
-    $(this).closest('tr')
-      .hide()
-      .next()
-      .show();
+    selectTarget(true);
   });
 
   $('#useWebsitePage').on('click', function (e) {
     e.preventDefault();
-    $(this).closest('tr')
-      .hide()
-      .prev()
-      .show();
+    selectTarget(false);
   });
 
   $('#page-result-exit').on('click', function () {

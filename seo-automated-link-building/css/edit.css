@@ -1,12 +1,36 @@
+/* Gewählte Seite im Look eines Textfelds (Werte aus wp-admin/css/forms.css, .regular-text). */
 #page-result {
     display: flex;
     flex-direction: row;
     align-items: center;
+    box-sizing: border-box;
+    width: 25em;
+    max-width: 100%;
+    min-height: 40px;
+    padding: 0 4px 0 12px;
+    border: 1px solid #949494;
+    border-radius: 2px;
+    background-color: #fff;
+    color: #1e1e1e;
+    font-size: 14px;
+}
+#page-result .text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 #page-result-exit {
     cursor: pointer;
-    font-size: 25px;
-    margin-left: 10px;
+    flex: none;
+    padding: 0 6px;
+    font-size: 22px;
+    line-height: 1;
+    color: #757575;
+}
+#page-result-exit:hover {
+    color: #d63638;
 }
 #seo-automated-link-building-keywords {
     position: relative;

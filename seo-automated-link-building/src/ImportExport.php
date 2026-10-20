@@ -52,7 +52,8 @@ class ImportExport {
 				}
 	        }
 
-            $csv = str_getcsv($line, $separator);
+            // $escape explizit (PHP 8.4 deprecated das Weglassen); '\\' entspricht dem bisherigen Default
+            $csv = str_getcsv($line, $separator, '"', '\\');
             if($i == 0) {
                 $header = $csv;
                 // determine id index
@@ -158,11 +159,12 @@ class ImportExport {
         // set UTF-8 bom header
         // fprintf($csv, chr(0xEF).chr(0xBB).chr(0xBF));
 
+        // $escape explizit (PHP 8.4 deprecated das Weglassen); '\\' hält Exporte mit importCsv() kompatibel
         foreach($links as $index => $link) {
             if($index == 0) {
-                fputcsv($csv, array_keys($link), $separator);
+                fputcsv($csv, array_keys($link), $separator, '"', '\\');
             }
-            fputcsv($csv, array_values($link), $separator);
+            fputcsv($csv, array_values($link), $separator, '"', '\\');
         }
 
         rewind($csv);
